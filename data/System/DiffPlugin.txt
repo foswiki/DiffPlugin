@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="micha" comment="reprev" date="1464779319" format="1.1" reprev="3" version="3"}%
+%META:TOPICINFO{author="ProjectContributor" comment="" date="1464780195" format="1.1"  version="1"}%
 ---+!! %TOPIC%
 %FORMFIELD{"Description"}%
 
@@ -101,13 +101,13 @@ scripts with a call to =diff=.
 | 01 Jun 2016 | initial release |
 
 %META:FORM{name="PackageForm"}%
-%META:FIELD{name="Author" title="Author" value="%25$CREATED_AUTHOR%25"}%
+%META:FIELD{name="Author" title="Author" value="Michael Daum"}%
 %META:FIELD{name="Version" title="Version" value="%25$VERSION%25"}%
 %META:FIELD{name="Release" title="Release" value="%25$RELEASE%25"}%
 %META:FIELD{name="Description" title="Description" value="%25$SHORTDESCRIPTION%25"}%
 %META:FIELD{name="Repository" title="Repository" value="https://github.com/foswiki/%25$ROOTMODULE%25"}%
-%META:FIELD{name="Copyright" title="Copyright" value="%25$CREATEDYEAR%25, %25$CREATED_AUTHOR%25, All Rights Reserved"}%
+%META:FIELD{name="Copyright" title="Copyright" value="2016 Michael Daum http://michaeldaumconsulting.com"}%
 %META:FIELD{name="License" title="License" value="GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]])"}%
 %META:FIELD{name="Home" title="Home" value="http://foswiki.org/Extensions/%25$ROOTMODULE%25"}%
 %META:FIELD{name="Support" title="Support" value="http://foswiki.org/Support/%25$ROOTMODULE%25"}%
-%META:FILEATTACHMENT{name="DiffScreenshot.png" attachment="DiffScreenshot.png" attr="" comment="" date="1464777845" size="112670" user="micha" version="2"}%
+%META:FILEATTACHMENT{name="DiffScreenshot.png" attachment="DiffScreenshot.png" attr="" comment="" date="1464780195" size="112670" user="ProjectContributor" version="1"}%
