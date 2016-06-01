@@ -1,0 +1,113 @@
+%META:TOPICINFO{author="micha" comment="reprev" date="1464779319" format="1.1" reprev="3" version="3"}%
+---+!! %TOPIC%
+%FORMFIELD{"Description"}%
+
+%TOC%
+
+---++ Description
+
+This plugin implements a way to display the difference between revisions of the same topic or 
+between two distinct topics. This adds YADT (yet another diff tool) to those previously available, 
+i.e. Foswiki's core =rdiff= as well as the <nop>CompareRevisionsAddOn's =compare= tools. In contrast
+to previous work, <nop>%TOPIC% tries to display differences in a way users _really_ can see what the difference
+actually is. It takes particularly care of any kind of meta data stored in a topic and diff these individually.
+<nop>%TOPIC% implements a =%DIFF= macro so that you can use it in wiki applications easily. 
+
+It integrates well with [[Foswiki:Extensions/AngularSkin][AngularSkin]]/[[Foswiki:Extensions/AngularPlugin][AngularPlugin]]
+so that browsing among differences using the "tape-recorder" navigation feels most natural while going forward and backwards
+between revisions.
+
+---++ Examples
+
+You type:
+
+<verbatim class="tml">
+%DIFF{
+   oldtopic="%SYSTEMWEB%.UserForm" 
+   newtopic="%USERSWEB%.UserForm"
+}%
+</verbatim>
+
+You get:
+
+<a href="%ATTACHURLPATH%/DiffScreenshot.png"><img src='%ATTACHURLPATH%/DiffScreenshot.png' width='400' alt='diff screenshot' /></a>
+
+---++ Syntax
+
+The =%DIFF= macro is mostly driven by defaults in the =diff.tmpl= template. Each parameter has got a named definition there being used
+as a fallback in case the parameter wasn't specified as part of the =%DIFF= macro.
+
+| *Parameter* | *Description* | *Default* |
+| =oldtopic= | name of the topic on the left handside | current topic |
+| =newtopic= | name of the topic on the right handside | =oldtopic= |
+| =oldrev= | revision of =oldtopic= to diff | latest revision of =oldtopic= |
+| =newrev=, =rev= | revision of the =newtopic= to diff | latest revision of =newtopic= |
+| =offset= | alternative way to specify the number of revisions to diff: either use =oldrev= and =newrev=, or use =rev= and specify an =offset= into the revision history to diff | 1 |
+| =context= | number of lines around a difference to display in addition to the difference itself | 2 |
+| =beforetext= | text to be displayed before any output| =diff::beforetext= |
+| =aftertext= | text to be appended to the output | =diff::aftertext= | 
+| =header= | header of the diff table while iterating over all differences of a specific type | =diff::header= |
+| =footer= | footer of a diff table | =diff::footer= | 
+| =format= | row of a diff table | =diff::format= | 
+| =meta_format= | format to be used to display meta data | =diff::meta_format= | 
+| =separator= | separator between rows of a diff table | =diff::separator= | 
+| =no_differences= | message to be displayed when no differences have been found | =diff::no_differences= |
+
+The format strings can take a number of variables refering to the properties of the objects being processed:
+
+   * =$oldtopic=: topic name (without the web name) of =oldtopic= 
+   * =$oldweb=: web name of =oldtopic=
+   * =$oldrev=: revision number of =oldtopic=
+   * =$maxoldrev=: maximum numbers of revision in =oldtopic=
+   * =$oldauthor=: author of the revision of =oldtopic= being processed
+   * =$olddate=: date when =$oldauthor= edited revision =oldrev= of =oldtopic=
+
+   * =$newtopic=: topic name (without the web name) of =newtopic= 
+   * =$newweb=: web name of =newtopic=
+   * =$newrev=: revision number of =newtopic=
+   * =$maxnewrev=: maximum numbers of revision in =newtopic=
+   * =$newauthor=: author of the revision of =newtopic= being processed
+   * =$newdate=: date when =$newauthor= edited revision =newrev= of =newtopic=
+
+   * =$offset=: offset between =$oldrev= and =$newrev=
+   * =$maxrev=: alias for =$maxnewrev=
+   * =$prevrev=: previous revision id
+   * =$nextrev=: next revision id
+
+   * =$old=: displays the difference of the current row being formatted in the column left column
+   * =$new=: displays the difference of the current row being formatted in the column right column
+   * =$action=: the kind of difference between =$old= and =$new=, can be "changed", "removed", "append" or "unchanged"
+   * =$index=: row being diff'ed currently
+   * =$name=: formfield filed name when diff'ing a !DataForm or any other custom meta data with a "name" attribute
+   * =$type=: type of data being proccessed, can be "TEXT","TOPICINFO" or "TOPICPARENT", "FORM", "FIELD", "FILEATTACHMENT", "PREFERENCES" or the registered identifier of custom meta data
+
+---++ Configuration
+
+<nop>%TOPIC% comes with two scripts that may be used in your web-server environment - =diff= and =diffauth= - that can be used similar to =rdiff= and =rdiffauth=. No additional provisions
+are required when using [[Foswiki:Extensions/FastCGIEngineContrib][FastCGIEngineContrib]] or any other persistent-perl environment where Foswiki's ={SwitchBoard}= mechanism is used to
+schedule the =diff= action to this plugin.
+
+To integrate <nop>%TOPIC% into the installed skin you may replace any call to =rdiff= with =diff=, or enable the ={PatchDiffScript}= to automatically replace any use of the =rdiff= or =compare=
+scripts with a call to =diff=.
+
+---++ Installation Instructions
+%$INSTALL_INSTRUCTIONS%
+
+---++ Dependencies
+%$DEPENDENCIES%
+
+---++ Change History
+%TABLE{columnwidths="7em" tablewidth="100%"}%
+| 01 Jun 2016 | initial release |
+
+%META:FORM{name="PackageForm"}%
+%META:FIELD{name="Author" title="Author" value="%25$CREATED_AUTHOR%25"}%
+%META:FIELD{name="Version" title="Version" value="%25$VERSION%25"}%
+%META:FIELD{name="Release" title="Release" value="%25$RELEASE%25"}%
+%META:FIELD{name="Description" title="Description" value="%25$SHORTDESCRIPTION%25"}%
+%META:FIELD{name="Repository" title="Repository" value="https://github.com/foswiki/%25$ROOTMODULE%25"}%
+%META:FIELD{name="Copyright" title="Copyright" value="%25$CREATEDYEAR%25, %25$CREATED_AUTHOR%25, All Rights Reserved"}%
+%META:FIELD{name="License" title="License" value="GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]])"}%
+%META:FIELD{name="Home" title="Home" value="http://foswiki.org/Extensions/%25$ROOTMODULE%25"}%
+%META:FIELD{name="Support" title="Support" value="http://foswiki.org/Support/%25$ROOTMODULE%25"}%
+%META:FILEATTACHMENT{name="DiffScreenshot.png" attachment="DiffScreenshot.png" attr="" comment="" date="1464777845" size="112670" user="micha" version="2"}%

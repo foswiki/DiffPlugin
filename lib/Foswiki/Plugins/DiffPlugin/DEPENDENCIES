@@ -1,0 +1,2 @@
+Algorithm::Diff,>=0,cpan,Required
+Algorithm::Diff::XS,>=0,cpan,optional

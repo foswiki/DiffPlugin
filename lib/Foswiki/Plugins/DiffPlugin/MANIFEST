@@ -1,0 +1,11 @@
+bin/diff 0755
+bin/diffauth 0755
+data/System/DiffPlugin.txt 0644
+lib/Foswiki/Plugins/DiffPlugin/Config.spec 0644
+lib/Foswiki/Plugins/DiffPlugin/Core.pm 0644
+lib/Foswiki/Plugins/DiffPlugin/DEPENDENCIES 0644
+lib/Foswiki/Plugins/DiffPlugin.pm 0644
+pub/System/DiffPlugin/diff.css 0644
+pub/System/DiffPlugin/diff.css.gz 0644
+pub/System/DiffPlugin/diff.uncompressed.css 0644
+pub/System/DiffPlugin/Makefile 0644
