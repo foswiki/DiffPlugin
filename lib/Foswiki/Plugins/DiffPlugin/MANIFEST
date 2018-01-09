@@ -1,3 +1,4 @@
+!noci
 bin/diff 0755
 bin/diffauth 0755
 data/System/DiffPlugin.txt 0644
@@ -18,7 +19,5 @@ pub/System/DiffPlugin/diff.css.gz 0644
 pub/System/DiffPlugin/DiffScreenshot.png 0644
 pub/System/DiffPlugin/diff.uncompressed.css 0644
 pub/System/DiffPlugin/Makefile 0644
-templates/diff.angular.nat.tmpl 0644
-templates/diff.nat.tmpl 0644
 templates/diff.pattern.tmpl 0644
 templates/diff.tmpl 0644

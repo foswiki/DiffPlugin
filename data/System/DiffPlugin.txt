@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ProjectContributor" comment="" date="1464780195" format="1.1"  version="1"}%
+%META:TOPICINFO{author="ProjectContributor" comment="" date="1515501688" format="1.1"  version="1"}%
 ---+!! %TOPIC%
 %FORMFIELD{"Description"}%
 
@@ -98,6 +98,7 @@ scripts with a call to =diff=.
 
 ---++ Change History
 %TABLE{columnwidths="7em" tablewidth="100%"}%
+| 09 Jan 2018 | throw an access exception instead of showing an inline error diffing revisions |
 | 01 Jun 2016 | initial release |
 
 %META:FORM{name="PackageForm"}%
@@ -106,8 +107,8 @@ scripts with a call to =diff=.
 %META:FIELD{name="Release" title="Release" value="%25$RELEASE%25"}%
 %META:FIELD{name="Description" title="Description" value="%25$SHORTDESCRIPTION%25"}%
 %META:FIELD{name="Repository" title="Repository" value="https://github.com/foswiki/%25$ROOTMODULE%25"}%
-%META:FIELD{name="Copyright" title="Copyright" value="2016 Michael Daum http://michaeldaumconsulting.com"}%
+%META:FIELD{name="Copyright" title="Copyright" value="2016-2018 Michael Daum http://michaeldaumconsulting.com"}%
 %META:FIELD{name="License" title="License" value="GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]])"}%
-%META:FIELD{name="Home" title="Home" value="http://foswiki.org/Extensions/%25$ROOTMODULE%25"}%
-%META:FIELD{name="Support" title="Support" value="http://foswiki.org/Support/%25$ROOTMODULE%25"}%
-%META:FILEATTACHMENT{name="DiffScreenshot.png" attachment="DiffScreenshot.png" attr="" comment="" date="1464780195" size="112670" user="ProjectContributor" version="1"}%
+%META:FIELD{name="Home" title="Home" value="https://foswiki.org/Extensions/%25$ROOTMODULE%25"}%
+%META:FIELD{name="Support" title="Support" value="https://foswiki.org/Support/%25$ROOTMODULE%25"}%
+%META:FILEATTACHMENT{name="DiffScreenshot.png" attachment="DiffScreenshot.png" attr="" comment="" date="1515501688" size="112670" user="ProjectContributor" version="1"}%

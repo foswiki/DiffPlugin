@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 #
-# DiffPlugin is Copyright (C) 2016 Michael Daum http://michaeldaumconsulting.com
+# DiffPlugin is Copyright (C) 2016-2018 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -89,8 +89,16 @@ sub handleDiffMacro {
   my $newTopic = $params->{_DEFAULT} || $params->{newtopic} || $topic;
   ($newWeb, $newTopic) = Foswiki::Func::normalizeWebTopicName($newWeb, $newTopic);
 
+  my $context = Foswiki::Func::getContext();
+
   return _inlineError("ERROR: topic not found - <nop>$newWeb.$newTopic") unless Foswiki::Func::topicExists($newWeb, $newTopic);
-  return _inlineError("ERROR: access denied") unless _hasDiffAccess($newWeb, $newTopic);
+  unless (_hasDiffAccess($newWeb, $newTopic)) {
+    if ($context->{diff}) {
+      throw Foswiki::AccessControlException("authenticated", $session->{user}, $newWeb, $newTopic, "access denied");
+    } else {
+      return _inlineError("ERROR: access denied");
+    }
+  }
 
   my $oldWeb = $newWeb;
   my $oldTopic = $params->{oldtopic} || $newTopic;
@@ -99,7 +107,13 @@ sub handleDiffMacro {
   my $isSameTopic = ($oldWeb eq $newWeb && $oldTopic eq $newTopic)?1:0;
 
   return _inlineError("ERROR: topic not found - <nop>$oldWeb.$oldTopic") unless Foswiki::Func::topicExists($oldWeb, $oldTopic);
-  return _inlineError("ERROR: access denied") unless $isSameTopic || _hasDiffAccess($oldWeb, $oldTopic);
+  unless (_hasDiffAccess($oldWeb, $oldTopic)) {
+    if ($context->{diff}) {
+      throw Foswiki::AccessControlException("authenticated", $session->{user}, $oldWeb, $oldTopic, "access denied");
+    } else {
+      return _inlineError("ERROR: access denied");
+    }
+  }
 
   $this->addAssets;
   Foswiki::Func::loadTemplate("diff");
