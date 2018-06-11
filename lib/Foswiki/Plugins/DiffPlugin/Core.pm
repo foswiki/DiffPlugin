@@ -400,6 +400,7 @@ sub _diffType {
         $action = 'changed';
         ($old, $new) = _diffLine($oldVal, $newVal);
         next if $old eq $new;
+
       } else {
         $action = 'removed';
         $old = _formatDiff([['-', $oldVal]]);
@@ -476,8 +477,8 @@ sub _formatDiff {
 sub _diffLine {
   my ($old, $new, $split) = @_;
 
-  return ("", "") unless $old && $new;
-
+  $old //= "";
+  $new //= "";
   $split ||= '';
 
   my @seq1 = map {_entityEncode($_)} split /$split/, $old;

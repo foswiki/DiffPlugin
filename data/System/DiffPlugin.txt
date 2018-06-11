@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ProjectContributor" comment="" date="1515501688" format="1.1"  version="1"}%
+%META:TOPICINFO{author="ProjectContributor" comment="" date="1528716796" format="1.1"  version="1"}%
 ---+!! %TOPIC%
 %FORMFIELD{"Description"}%
 
@@ -98,8 +98,9 @@ scripts with a call to =diff=.
 
 ---++ Change History
 %TABLE{columnwidths="7em" tablewidth="100%"}%
-| 09 Jan 2018 | throw an access exception instead of showing an inline error diffing revisions |
-| 01 Jun 2016 | initial release |
+|  11 Jun 2018 | fix changes not displayed under certain conditions |
+|  09 Jan 2018 | throw an access exception instead of showing an inline error diffing revisions |
+|  01 Jun 2016 | initial release |
 
 %META:FORM{name="PackageForm"}%
 %META:FIELD{name="Author" title="Author" value="Michael Daum"}%
@@ -111,4 +112,4 @@ scripts with a call to =diff=.
 %META:FIELD{name="License" title="License" value="GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]])"}%
 %META:FIELD{name="Home" title="Home" value="https://foswiki.org/Extensions/%25$ROOTMODULE%25"}%
 %META:FIELD{name="Support" title="Support" value="https://foswiki.org/Support/%25$ROOTMODULE%25"}%
-%META:FILEATTACHMENT{name="DiffScreenshot.png" attachment="DiffScreenshot.png" attr="" comment="" date="1515501688" size="112670" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="DiffScreenshot.png" attachment="DiffScreenshot.png" attr="" comment="" date="1528716796" size="112670" user="ProjectContributor" version="1"}%
