@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ProjectContributor" comment="" date="1540454078" format="1.1"  version="1"}%
+%META:TOPICINFO{author="ProjectContributor" comment="" date="1540458596" format="1.1" version="1"}%
 ---+!! %TOPIC%
 %FORMFIELD{"Description"}%
 
@@ -30,7 +30,7 @@ You type:
 
 You get:
 
-<a href="%ATTACHURLPATH%/DiffScreenshot.png"><img src='%ATTACHURLPATH%/DiffScreenshot.png' width='400' alt='diff screenshot' /></a>
+<a href="%ATTACHURLPATH%/DiffScreenshot.png"><img src='%ATTACHURLPATH%/DiffScreenshot.png' width='500' alt='diff screenshot' /></a>
 
 ---++ Syntax
 
@@ -112,7 +112,7 @@ scripts with a call to =diff=.
 
 ---++ Change History
 %TABLE{columnwidths="7em" tablewidth="100%"}%
-|  25 Oct 2018 | implement a separate DIFFCONTROL macro |
+|  25 Oct 2018 | implement a separate DIFFCONTROL macro; separate diff.tmpl and diffview.tmpl |
 |  11 Jun 2018 | fix changes not displayed under certain conditions |
 |  09 Jan 2018 | throw an access exception instead of showing an inline error diffing revisions |
 |  01 Jun 2016 | initial release |
@@ -127,4 +127,4 @@ scripts with a call to =diff=.
 %META:FIELD{name="License" title="License" value="GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]])"}%
 %META:FIELD{name="Home" title="Home" value="https://foswiki.org/Extensions/%25$ROOTMODULE%25"}%
 %META:FIELD{name="Support" title="Support" value="https://foswiki.org/Support/%25$ROOTMODULE%25"}%
-%META:FILEATTACHMENT{name="DiffScreenshot.png" attachment="DiffScreenshot.png" attr="" comment="" date="1540454078" size="112670" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="DiffScreenshot.png" attachment="DiffScreenshot.png" attr="" comment="" date="1540458596" size="112670" user="ProjectContributor" version="1"}%

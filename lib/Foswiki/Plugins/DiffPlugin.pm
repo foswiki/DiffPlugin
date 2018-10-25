@@ -21,7 +21,7 @@ use warnings;
 use Foswiki::Func ();
 #use Foswiki::Plugins::DiffPlugin::Core(); # only enable during development of DiffPlugin
 
-our $VERSION = '2.00';
+our $VERSION = '2.01';
 our $RELEASE = '25 Oct 2018';
 our $SHORTDESCRIPTION = 'Compare difference between topics and revisions';
 our $NO_PREFS_IN_TOPIC = 1;

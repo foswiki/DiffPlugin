@@ -73,7 +73,7 @@ sub handleDiffScript {
   Foswiki::UI::checkTopicExists($session, $web, $topic, 'diff');
 
   my $meta = Foswiki::Meta->new($session, $web, $topic);
-  my $tmpl = Foswiki::Func::readTemplate("diff");
+  my $tmpl = Foswiki::Func::readTemplate("diffview");
   $tmpl = $meta->expandMacros($tmpl);
   $tmpl = $meta->renderTML($tmpl);
   $session->writeCompletePage($tmpl);
@@ -203,7 +203,8 @@ sub handleDiffMacro {
   my $opts = $this->_getOpts($session, $params, $topic, $web);
 
   $this->addAssets;
-  Foswiki::Func::loadTemplate("diff");
+  Foswiki::Func::loadTemplate("diff") 
+    unless Foswiki::Func::expandTemplate("diff"); # prevent loading it twice
 
   # SMELL: deep error in store
   #die ("asked for old rev=$opts->{oldRev} but got $oldTestRev") unless $opts->{oldRev} eq $oldTestRev;

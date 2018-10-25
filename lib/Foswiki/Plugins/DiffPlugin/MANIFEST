@@ -21,3 +21,4 @@ pub/System/DiffPlugin/diff.uncompressed.css 0644
 pub/System/DiffPlugin/Makefile 0644
 templates/diff.pattern.tmpl 0644
 templates/diff.tmpl 0644
+templates/diffview.tmpl 0644

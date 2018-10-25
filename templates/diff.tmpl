@@ -1,5 +1,3 @@
-%TMPL:DEF{"content"}%%TMPL:P{"diff"}%%TMPL:END%
-
 %TMPL:DEF{"diff"}%%DIFF{
   newrev="%TMPL:P{"newrev"}%"
   oldrev="%TMPL:P{"oldrev"}%"
@@ -29,6 +27,8 @@
 %TMPL:DEF{"diff::control::end::icon"}%<img src='%PUBURLPATH%/%SYSTEMWEB%/DiffPlugin/control-end.png' alt='start' width='16' height='16' />%TMPL:END%
 %TMPL:DEF{"diff::control::end::disabled::icon"}%<img src='%PUBURLPATH%/%SYSTEMWEB%/DiffPlugin/control-end-gray.png' alt='start' width='16' height='16' />%TMPL:END%
 %TMPL:DEF{"diff::control::quit::icon"}%<img src='%PUBURLPATH%/%SYSTEMWEB%/FamFamFamSilkIcons/cross.png' alt='quit' width='16' height='16' />%TMPL:END%
+
+%TMPL:DEF{"diff::control::quit"}%<a href='%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%'>%TMPL:P{"diff::control::quit::icon"}%</a>%TMPL:END%
 
 %TMPL:DEF{"diff::control::start"}%%IF{"$oldrev>1"
   then="<a href='%SCRIPTURLPATH{"diff"}%/%WEB%/%TOPIC%?rev=2&context=%TMPL:P{"context"}%&offset=$offset' title='%MAKETEXT{"Oldest revision"}%'>
