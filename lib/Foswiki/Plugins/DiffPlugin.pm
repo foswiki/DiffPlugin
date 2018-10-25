@@ -21,8 +21,8 @@ use warnings;
 use Foswiki::Func ();
 #use Foswiki::Plugins::DiffPlugin::Core(); # only enable during development of DiffPlugin
 
-our $VERSION = '1.02';
-our $RELEASE = '11 Jun 2018';
+our $VERSION = '2.00';
+our $RELEASE = '25 Oct 2018';
 our $SHORTDESCRIPTION = 'Compare difference between topics and revisions';
 our $NO_PREFS_IN_TOPIC = 1;
 our $core;
@@ -30,6 +30,7 @@ our $core;
 sub initPlugin {
 
   Foswiki::Func::registerTagHandler('DIFF', sub { return getCore()->handleDiffMacro(@_); });
+  Foswiki::Func::registerTagHandler('DIFFCONTROL', sub { return getCore()->handleDiffControlMacro(@_); });
 
   return 1;
 }

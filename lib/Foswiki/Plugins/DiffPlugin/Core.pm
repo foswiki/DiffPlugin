@@ -81,89 +81,142 @@ sub handleDiffScript {
   return;
 }
 
+sub _getOpts {
+  my ($this, $session, $params, $topic, $web) = @_;
+
+  my %opts = (); 
+  my $context = Foswiki::Func::getContext();
+
+  $opts{newWeb} = $web;
+  $opts{newTopic} = $params->{_DEFAULT} || $params->{newtopic} || $topic;
+  ($opts{newWeb}, $opts{newTopic}) = Foswiki::Func::normalizeWebTopicName($opts{newWeb}, $opts{newTopic});
+
+  return _inlineError("ERROR: topic not found - <nop>$opts{newWeb}.$opts{newTopic}") unless Foswiki::Func::topicExists($opts{newWeb}, $opts{newTopic});
+  unless (_hasDiffAccess($opts{newWeb}, $opts{newTopic})) {
+    if ($context->{diff}) {
+      throw Foswiki::AccessControlException("authenticated", $session->{user}, $opts{newWeb}, $opts{newTopic}, "access denied");
+    } else {
+      return _inlineError("ERROR: access denied");
+    }
+  }
+
+  $opts{oldWeb} = $opts{newWeb};
+  $opts{oldTopic} = $params->{oldtopic} || $opts{newTopic};
+  ($opts{oldWeb}, $opts{oldTopic}) = Foswiki::Func::normalizeWebTopicName($opts{oldWeb}, $opts{oldTopic});
+
+  my $isSameTopic = ($opts{oldWeb} eq $opts{newWeb} && $opts{oldTopic} eq $opts{newTopic})?1:0;
+
+  return _inlineError("ERROR: topic not found - <nop>$opts{oldWeb}.$opts{oldTopic}") unless Foswiki::Func::topicExists($opts{oldWeb}, $opts{oldTopic});
+  unless (_hasDiffAccess($opts{oldWeb}, $opts{oldTopic})) {
+    if ($context->{diff}) {
+      throw Foswiki::AccessControlException("authenticated", $session->{user}, $opts{oldWeb}, $opts{oldTopic}, "access denied");
+    } else {
+      return _inlineError("ERROR: access denied");
+    }
+  }
+
+  (undef, undef, $opts{maxNewRev}) = Foswiki::Func::getRevisionInfo($opts{newWeb}, $opts{newTopic});
+
+  if ($isSameTopic) {
+    $opts{maxOldRev} = $opts{maxNewRev};
+  } else {
+    (undef, undef, $opts{maxOldRev}) = Foswiki::Func::getRevisionInfo($opts{oldWeb}, $opts{oldTopic});
+  }
+
+  $opts{newRev} = $params->{rev} || $params->{newrev} || $opts{maxNewRev};
+  $opts{newRev} =~ s/[^\d]//g;
+  $opts{newRev} = 1 if !$opts{newRev} || $opts{newRev} <= 0;
+  $opts{newRev} = $opts{maxNewRev} if $opts{newRev} > $opts{maxNewRev};
+
+  $opts{offset} = $params->{offset} || 1;
+  $opts{oldRev} = $params->{oldrev} // '';
+  $opts{oldRev} =~ s/[^\d]//g;
+  $opts{oldRev} = $opts{newRev} - $opts{offset} if $opts{oldRev} eq '';
+  $opts{oldRev} = 1 if $opts{oldRev} <= 0;
+  $opts{oldRev} = $opts{maxOldRev} if $opts{oldRev} > $opts{maxOldRev};
+
+  if ($opts{oldRev} > $opts{newRev}) {
+    my $tmp = $opts{oldRev};
+    $opts{oldRev} = $opts{newRev};
+    $opts{newRev} = $tmp;
+  }
+
+  $opts{offset} = ($opts{newRev} - $opts{oldRev} < $opts{offset}) ? $opts{offset} : $opts{newRev} - $opts{oldRev};    # finally calculate the real value
+
+  $opts{prevRev} = $opts{newRev} - 1;
+  $opts{prevRev} = 1 if $opts{prevRev} < 1;
+
+  $opts{nextRev} = $opts{newRev} + $opts{offset};
+  $opts{nextRev} = $opts{maxNewRev} if $opts{nextRev} > $opts{maxNewRev};
+
+
+  ($opts{newDate}, $opts{newAuthor}, $opts{newTestRev}) = Foswiki::Func::getRevisionInfo($opts{newWeb}, $opts{newTopic}, $opts{newRev});
+  ($opts{oldDate}, $opts{oldAuthor}, $opts{oldTestRev}) = Foswiki::Func::getRevisionInfo($opts{oldWeb}, $opts{oldTopic}, $opts{oldRev});
+
+  return \%opts;
+}
+
+sub _expandVars {
+  my ($this, $format, $opts) = @_;
+
+  $format =~ s/\$oldrev/$opts->{oldRev}/g;
+  $format =~ s/\$maxoldrev/$opts->{maxOldRev}/g;
+  $format =~ s/\$oldweb/$opts->{oldWeb}/g;
+  $format =~ s/\$oldtopic/$opts->{oldTopic}/g;
+  $format =~ s/\$oldauthor/$opts->{oldAuthor}/g;
+  $format =~ s/\$olddate/Foswiki::Time::formatTime($opts->{oldDate})/ge;
+
+  $format =~ s/\$newrev/$opts->{newRev}/g;
+  $format =~ s/\$maxnewrev/$opts->{maxOldRev}/g;
+  $format =~ s/\$newweb/$opts->{newWeb}/g;
+  $format =~ s/\$newtopic/$opts->{newTopic}/g;
+  $format =~ s/\$newauthor/$opts->{newAuthor}/g;
+  $format =~ s/\$newdate/Foswiki::Time::formatTime($opts->{newDate})/ge;
+
+  $format =~ s/\$rev/$opts->{newRev}/g;
+  $format =~ s/\$maxrev/$opts->{maxNewRev}/g;
+  $format =~ s/\$prevrev/$opts->{prevRev}/g;
+  $format =~ s/\$nextrev/$opts->{nextRev}/g;
+  $format =~ s/\$offset/$opts->{offset}/g;
+
+  return $format;
+}
+
+
+sub handleDiffControlMacro {
+  my ($this, $session, $params, $topic, $web) = @_;
+
+  writeDebug("called DIFFCONTROL()");
+  my $opts = $this->_getOpts($session, $params, $topic, $web);
+
+  my $template = $params->{template} // "diff::control";
+  my $format = $params->{format} // Foswiki::Func::expandTemplate($template);
+  my $result = $this->_expandVars($format, $opts);
+
+  return Foswiki::Func::decodeFormatTokens($result);
+}
+
 sub handleDiffMacro {
   my ($this, $session, $params, $topic, $web) = @_;
 
   writeDebug("called DIFF()");
-  my $newWeb = $web;
-  my $newTopic = $params->{_DEFAULT} || $params->{newtopic} || $topic;
-  ($newWeb, $newTopic) = Foswiki::Func::normalizeWebTopicName($newWeb, $newTopic);
-
-  my $context = Foswiki::Func::getContext();
-
-  return _inlineError("ERROR: topic not found - <nop>$newWeb.$newTopic") unless Foswiki::Func::topicExists($newWeb, $newTopic);
-  unless (_hasDiffAccess($newWeb, $newTopic)) {
-    if ($context->{diff}) {
-      throw Foswiki::AccessControlException("authenticated", $session->{user}, $newWeb, $newTopic, "access denied");
-    } else {
-      return _inlineError("ERROR: access denied");
-    }
-  }
-
-  my $oldWeb = $newWeb;
-  my $oldTopic = $params->{oldtopic} || $newTopic;
-  ($oldWeb, $oldTopic) = Foswiki::Func::normalizeWebTopicName($oldWeb, $oldTopic);
-
-  my $isSameTopic = ($oldWeb eq $newWeb && $oldTopic eq $newTopic)?1:0;
-
-  return _inlineError("ERROR: topic not found - <nop>$oldWeb.$oldTopic") unless Foswiki::Func::topicExists($oldWeb, $oldTopic);
-  unless (_hasDiffAccess($oldWeb, $oldTopic)) {
-    if ($context->{diff}) {
-      throw Foswiki::AccessControlException("authenticated", $session->{user}, $oldWeb, $oldTopic, "access denied");
-    } else {
-      return _inlineError("ERROR: access denied");
-    }
-  }
+  my $opts = $this->_getOpts($session, $params, $topic, $web);
 
   $this->addAssets;
   Foswiki::Func::loadTemplate("diff");
 
-  my $maxNewRev;
-  my $maxOldRev;
-  (undef, undef, $maxNewRev) = Foswiki::Func::getRevisionInfo($newWeb, $newTopic);
-
-  if ($isSameTopic) {
-    $maxOldRev = $maxNewRev;
-  } else {
-    (undef, undef, $maxOldRev) = Foswiki::Func::getRevisionInfo($oldWeb, $oldTopic);
-  }
-
-  my $newRev = $params->{rev} || $params->{newrev} || $maxNewRev;
-  $newRev =~ s/[^\d]//g;
-  $newRev = 1 if !$newRev || $newRev <= 0;
-  $newRev = $maxNewRev if $newRev > $maxNewRev;
-
-  my $offset = $params->{offset} || 1;
-  my $oldRev = $params->{oldrev} // '';
-  $oldRev =~ s/[^\d]//g;
-  $oldRev = $newRev - $offset if $oldRev eq '';
-  $oldRev = 1 if $oldRev <= 0;
-  $oldRev = $maxOldRev if $oldRev > $maxOldRev;
-
-  if ($oldRev > $newRev) {
-    my $tmp = $oldRev;
-    $oldRev = $newRev;
-    $newRev = $tmp;
-  }
-
-
-  $offset = ($newRev - $oldRev < $offset) ? $offset : $newRev - $oldRev;    # finally calculate the real value
-
-  my ($newDate, $newAuthor, $newTestRev) = Foswiki::Func::getRevisionInfo($newWeb, $newTopic, $newRev);
-  my ($oldDate, $oldAuthor, $oldTestRev) = Foswiki::Func::getRevisionInfo($oldWeb, $oldTopic, $oldRev);
-
   # SMELL: deep error in store
-  #die ("asked for old rev=$oldRev but got $oldTestRev") unless $oldRev eq $oldTestRev;
-  #die ("asked for new rev=$newRev but got $newTestRev") unless $newRev eq $newTestRev;
+  #die ("asked for old rev=$opts->{oldRev} but got $oldTestRev") unless $opts->{oldRev} eq $oldTestRev;
+  #die ("asked for new rev=$opts->{newRev} but got $newTestRev") unless $opts->{newRev} eq $newTestRev;
 
-  writeDebug("newWeb=$newWeb, oldTopic=$newTopic, newRev=$newRev");
-  writeDebug("oldWeb=$oldWeb, oldTopic=$oldTopic, oldRev=$oldRev");
+  writeDebug("newWeb=$opts->{newWeb}, oldTopic=$opts->{newTopic}, newRev=$opts->{newRev}");
+  writeDebug("oldWeb=$opts->{oldWeb}, oldTopic=$opts->{oldTopic}, oldRev=$opts->{oldRev}");
 
   # nothing to diff
-  return "" if $oldRev <= 0 || $newRev <= 0 || $oldRev == $newRev;
+  return "" if $opts->{oldRev} <= 0 || $opts->{newRev} <= 0 || $opts->{oldRev} == $opts->{newRev};
 
-  my ($oldMeta, $oldText) = Foswiki::Func::readTopic($oldWeb, $oldTopic, $oldRev);
-  my ($newMeta, $newText) = Foswiki::Func::readTopic($newWeb, $newTopic, $newRev);
+  my ($oldMeta, $oldText) = Foswiki::Func::readTopic($opts->{oldWeb}, $opts->{oldTopic}, $opts->{oldRev});
+  my ($newMeta, $newText) = Foswiki::Func::readTopic($opts->{newWeb}, $opts->{newTopic}, $opts->{newRev});
 
   $params->{beforetext} //= Foswiki::Func::expandTemplate("diff::beforetext");
   $params->{header} //= Foswiki::Func::expandTemplate("diff::header");
@@ -173,10 +226,7 @@ sub handleDiffMacro {
   $params->{no_differences} //= Foswiki::Func::expandTemplate("diff::no_differences");
   $params->{separator} //= Foswiki::Func::expandTemplate("diff::separator");
   $params->{aftertext} //= Foswiki::Func::expandTemplate("diff::aftertext");
-
-  $params->{context} //= 2;
-  $params->{context} =~ s/[^\d\-]//g;
-  $params->{context} //= 2;
+  $params->{context} =~ s/[^\d]//g;
 
   my $result = '';
 
@@ -186,37 +236,15 @@ sub handleDiffMacro {
   $result = $params->{no_differences} unless $result;
   $result = $params->{beforetext} . $result . $params->{aftertext};
 
-  $result =~ s/\$oldrev/$oldRev/g;
-  $result =~ s/\$maxoldrev/$maxOldRev/g;
-  $result =~ s/\$oldweb/$oldWeb/g;
-  $result =~ s/\$oldtopic/$oldTopic/g;
-  $result =~ s/\$oldauthor/$oldAuthor/g;
-  $result =~ s/\$olddate/Foswiki::Time::formatTime($oldDate)/ge;
-
-  $result =~ s/\$newrev/$newRev/g;
-  $result =~ s/\$maxnewrev/$maxOldRev/g;
-  $result =~ s/\$newweb/$newWeb/g;
-  $result =~ s/\$newtopic/$newTopic/g;
-  $result =~ s/\$newauthor/$newAuthor/g;
-  $result =~ s/\$newdate/Foswiki::Time::formatTime($newDate)/ge;
-
-  my $prevRev = $newRev - 1;
-  $prevRev = 1 if $prevRev < 1;
-
-  my $nextRev = $newRev + $offset;
-  $nextRev = $maxNewRev if $nextRev > $maxNewRev;
-
-  $result =~ s/\$rev/$newRev/g;
-  $result =~ s/\$maxrev/$maxNewRev/g;
-  $result =~ s/\$prevrev/$prevRev/g;
-  $result =~ s/\$nextrev/$nextRev/g;
-  $result =~ s/\$offset/$offset/g;
+  $result = $this->_expandVars($result, $opts);
 
   return Foswiki::Func::decodeFormatTokens($result);
 }
 
-sub _diffText {
-  my ($oldText, $newText, $params) = @_;
+sub _diffMultiLine {
+  my ($oldText, $newText, $context) = @_;
+
+  $context //= 2;
 
   my @result = ();
 
@@ -252,35 +280,30 @@ sub _diffText {
       $new = _formatDiff([['u', $line->[2]]]);
     }
 
-    next if $old eq "" && $new eq "";
-
-    $old = '&nbsp;' unless $old ne "";
-    $new = '&nbsp;' unless $new ne "";
-
-    my $line = $params->{format};
-
-    $line =~ s/\$action/$action/g;
-    $line =~ s/\$old/$old/g;
-    $line =~ s/\$new/$new/g;
-    $line =~ s/\$index/$index/g;
+    my $record = {
+      action => $action,
+      old => $old,
+      new => $new,
+      index => $index,
+    };
 
     writeDebug("state=$state, ", 0);
-    if ($params->{context} < 0) {
-      push @result, $line;
+    if ($context < 0) {
+      push @result, $record;
     } else {
       if ($action eq 'unchanged') {
         if ($state == 0) {
           writeDebug("$index: unchanged line added to before");
-          push @contextBefore, $line;
-          shift @contextBefore if scalar(@contextBefore) > $params->{context};
+          push @contextBefore, $record;
+          shift @contextBefore if scalar(@contextBefore) > $context;
         } elsif ($state == 1) {
-          if (scalar(@contextAfter) < $params->{context}) {
+          if (scalar(@contextAfter) < $context) {
             writeDebug("$index: unchanged line added to after");
-            push @contextAfter, $line;
+            push @contextAfter, $record;
           } else {
             writeDebug("$index: adding after to result, adding line to before");
-            push @result, @contextAfter if @contextAfter;
-            push @contextBefore, $line;
+            push @result, $_ foreach @contextAfter;
+            push @contextBefore, $record;
             @contextAfter = ();
             $state = 0;
           }
@@ -288,22 +311,50 @@ sub _diffText {
       } else {
         if (@contextAfter) {
           writeDebug("$index: adding after to result and adding line to result");
-          push @result, @contextAfter;
+          push @result, $_ foreach @contextAfter;
           @contextAfter = ();
         }
         if (@contextBefore) {
           writeDebug("$index: adding before to result and adding line to result");
-          push @result, @contextBefore;
+          push @result, $_ foreach @contextBefore;
           @contextBefore = ();
         } else {
           writeDebug("$index: adding line to result");
         }
-        push @result, $line;
+        push @result, $record;
         $state = 1;
       }
     }
   }
-  push @result, @contextAfter if $state == 1 && @contextAfter;
+
+  return @result;
+}
+
+sub _diffText {
+  my ($oldText, $newText, $params) = @_;
+
+  my @result = ();
+
+  my @diffs = _diffMultiLine($oldText, $newText, $params->{context});
+
+  foreach my $record (@diffs) {
+    my $line = $params->{format};
+
+    my $old = $record->{old};
+    my $new = $record->{new};
+
+    next if $old eq "" && $new eq "";
+
+    $old = '&nbsp;' unless $old ne "";
+    $new = '&nbsp;' unless $new ne "";
+
+    $line =~ s/\$action/$record->{action}/g;
+    $line =~ s/\$index/$record->{index}/g;
+    $line =~ s/\$old/$old/g;
+    $line =~ s/\$new/$new/g;
+
+    push @result, $line;
+  }
 
   my $result = "";
   if (@result) {
@@ -398,7 +449,17 @@ sub _diffType {
 
         # diff values
         $action = 'changed';
-        ($old, $new) = _diffLine($oldVal, $newVal);
+
+        if ($oldVal =~ /\n/ || $newVal =~ /\n/) {
+          my @records = _diffMultiLine($oldVal, $newVal, $params->{context});
+          foreach my $record (@records) {
+            $old .= "\n" . $record->{old};
+            $new .= "\n" .$record->{new};
+          }
+        } else {
+          ($old, $new) = _diffLine($oldVal, $newVal);
+        }
+
         next if $old eq $new;
 
       } else {

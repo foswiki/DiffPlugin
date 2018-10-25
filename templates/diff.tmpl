@@ -66,8 +66,6 @@
         </a>"
 }%%TMPL:END%
 
-%TMPL:DEF{"diff::control::quit"}%<a href='%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%'>%TMPL:P{"diff::control::quit::icon"}%</a>%TMPL:END%
-
 %TMPL:DEF{"diff::beforetext"}%<h1>%IF{"'$oldweb' != '$newweb' or '$oldtopic' != '$newtopic'"
   then="<nop>$oldweb.$oldtopic vs <nop>$newweb.$newtopic"
   else="[[$oldweb.$oldtopic]]"

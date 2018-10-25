@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ProjectContributor" comment="" date="1528716796" format="1.1"  version="1"}%
+%META:TOPICINFO{author="ProjectContributor" comment="" date="1540454078" format="1.1"  version="1"}%
 ---+!! %TOPIC%
 %FORMFIELD{"Description"}%
 
@@ -33,6 +33,8 @@ You get:
 <a href="%ATTACHURLPATH%/DiffScreenshot.png"><img src='%ATTACHURLPATH%/DiffScreenshot.png' width='400' alt='diff screenshot' /></a>
 
 ---++ Syntax
+
+---+++ DIFF
 
 The =%DIFF= macro is mostly driven by defaults in the =diff.tmpl= template. Each parameter has got a named definition there being used
 as a fallback in case the parameter wasn't specified as part of the =%DIFF= macro.
@@ -81,6 +83,18 @@ The format strings can take a number of variables refering to the properties of 
    * =$name=: formfield filed name when diff'ing a !DataForm or any other custom meta data with a "name" attribute
    * =$type=: type of data being proccessed, can be "TEXT","TOPICINFO" or "TOPICPARENT", "FORM", "FIELD", "FILEATTACHMENT", "PREFERENCES" or the registered identifier of custom meta data
 
+---+++ DIFFCONTROL
+
+The =%DIFFCONTROL= lets you control a =%DIFF= happening on the same page. While you might specifiy all aspects of the diff directly in the =%DIFF= macro
+the =%DIFFCONTROL= lets you do so independently somewhere else on the page. I.e. it is _not_ performing the diff operation itself. It rather displays control elements
+used to navigate between other diffs, like jumping to the previous or next diff following the current one. By default the appearance of diff controls are configured
+by the =diff::control= part of the =diff.tmpl= template file part of this extension. You might still decide to override those using the following parameters:
+
+   * =temlpate=: the template to read controls from, defaults to =diff::control=
+   * =format=: a format string to specify a diff control explicitly
+
+Note that when =format= is given =template= is ignored. =template= basically is the name of a template to be used as a =format=. The format string then makes use of [[#DIFF][above variables]].
+
 ---++ Configuration
 
 <nop>%TOPIC% comes with two scripts that may be used in your web-server environment - =diff= and =diffauth= - that can be used similar to =rdiff= and =rdiffauth=. No additional provisions
@@ -98,6 +112,7 @@ scripts with a call to =diff=.
 
 ---++ Change History
 %TABLE{columnwidths="7em" tablewidth="100%"}%
+|  25 Oct 2018 | implement a separate DIFFCONTROL macro |
 |  11 Jun 2018 | fix changes not displayed under certain conditions |
 |  09 Jan 2018 | throw an access exception instead of showing an inline error diffing revisions |
 |  01 Jun 2016 | initial release |
@@ -112,4 +127,4 @@ scripts with a call to =diff=.
 %META:FIELD{name="License" title="License" value="GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]])"}%
 %META:FIELD{name="Home" title="Home" value="https://foswiki.org/Extensions/%25$ROOTMODULE%25"}%
 %META:FIELD{name="Support" title="Support" value="https://foswiki.org/Support/%25$ROOTMODULE%25"}%
-%META:FILEATTACHMENT{name="DiffScreenshot.png" attachment="DiffScreenshot.png" attr="" comment="" date="1528716796" size="112670" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="DiffScreenshot.png" attachment="DiffScreenshot.png" attr="" comment="" date="1540454078" size="112670" user="ProjectContributor" version="1"}%
