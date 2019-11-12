@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 #
-# DiffPlugin is Copyright (C) 2016-2018 Michael Daum http://michaeldaumconsulting.com
+# DiffPlugin is Copyright (C) 2016-2019 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,9 +19,9 @@ use strict;
 use warnings;
 
 BEGIN {
-  eval "use Algorithm::Diff::XS qw( sdiff );";
+  eval "use Algorithm::Diff::XS qw( sdiff )"; ## no critics
   if ($@) {
-    eval "use Algorithm::Diff qw( sdiff );"; 
+    eval "use Algorithm::Diff qw( sdiff )";  ## no critics
     die $@ if $@;
   }
 }
@@ -53,6 +53,12 @@ sub new {
   return $this;
 }
 
+sub finish {
+  my $this = shift;
+
+  undef $this->{_opts};
+}
+
 sub addAssets {
   my $this = shift;
 
@@ -60,6 +66,7 @@ sub addAssets {
   $this->{_doneAssets} = 1;
 
   Foswiki::Func::addToZone('head', 'DIFFPLUGIN', '<link rel="stylesheet" type="text/css" href="%PUBURLPATH%/System/DiffPlugin/diff.css" media="all" />');
+  Foswiki::Func::addToZone('script', 'DIFFPLUGIN', '<script src="%PUBURLPATH%/System/DiffPlugin/diff.js" media="all" ></script>');
 }
 
 sub handleDiffScript {
@@ -77,6 +84,15 @@ sub handleDiffScript {
   $tmpl = $meta->expandMacros($tmpl);
   $tmpl = $meta->renderTML($tmpl);
   $session->writeCompletePage($tmpl);
+
+  my $rev1 = '';
+  my $rev2 = '';
+  if ($this->{_opts}) {
+    $rev1 = $this->{_opts}{oldRev};
+    $rev2 = $this->{_opts}{newRev};
+  }
+
+  $session->logEvent('diff', $web . '.' . $topic, "$rev1 $rev2" );
 
   return;
 }
@@ -123,6 +139,7 @@ sub _getOpts {
     (undef, undef, $opts{maxOldRev}) = Foswiki::Func::getRevisionInfo($opts{oldWeb}, $opts{oldTopic});
   }
 
+  $opts{exclude} = $params->{exclude} // '';
   $opts{newRev} = $params->{rev} || $params->{newrev} || $opts{maxNewRev};
   $opts{newRev} =~ s/[^\d]//g;
   $opts{newRev} = 1 if !$opts{newRev} || $opts{newRev} <= 0;
@@ -153,6 +170,10 @@ sub _getOpts {
   ($opts{newDate}, $opts{newAuthor}, $opts{newTestRev}) = Foswiki::Func::getRevisionInfo($opts{newWeb}, $opts{newTopic}, $opts{newRev});
   ($opts{oldDate}, $opts{oldAuthor}, $opts{oldTestRev}) = Foswiki::Func::getRevisionInfo($opts{oldWeb}, $opts{oldTopic}, $opts{oldRev});
 
+  if ($context->{diff}) {
+    $this->{_opts} = \%opts;
+  }
+
   return \%opts;
 }
 
@@ -178,6 +199,7 @@ sub _expandVars {
   $format =~ s/\$prevrev/$opts->{prevRev}/g;
   $format =~ s/\$nextrev/$opts->{nextRev}/g;
   $format =~ s/\$offset/$opts->{offset}/g;
+  $format =~ s/\$exclude/$opts->{exclude}/g;
 
   return $format;
 }
@@ -227,6 +249,7 @@ sub handleDiffMacro {
   $params->{no_differences} //= Foswiki::Func::expandTemplate("diff::no_differences");
   $params->{separator} //= Foswiki::Func::expandTemplate("diff::separator");
   $params->{aftertext} //= Foswiki::Func::expandTemplate("diff::aftertext");
+  $params->{context} //= 2;
   $params->{context} =~ s/[^\d]//g;
 
   my $result = '';
@@ -245,7 +268,7 @@ sub handleDiffMacro {
 sub _diffMultiLine {
   my ($oldText, $newText, $context) = @_;
 
-  $context //= 2;
+  $context ||= 2;
 
   my @result = ();
 
@@ -374,35 +397,47 @@ sub _diffMeta {
   my $result = '';
 
   # parent
-  $params->{title} = '%MAKETEXT{"Parent topic"}%';
-  $result .= _diffText($oldMeta->getParent(), $newMeta->getParent(), $params);
+  unless ($params->{exclude} && $params->{exclude} =~ /\bparent\b/) {
+    $params->{title} = '%MAKETEXT{"Parent topic"}%';
+    $result .= _diffText($oldMeta->getParent(), $newMeta->getParent(), $params);
+  }
 
   # form name
-  $params->{title} = '%MAKETEXT{"Form Name"}%';
-  $result .= _diffText($oldMeta->getFormName(), $newMeta->getFormName(), $params);
+  unless ($params->{exclude} && $params->{exclude} =~ /\bform\b/) {
+    $params->{title} = '%MAKETEXT{"Form Name"}%';
+    $result .= _diffText($oldMeta->getFormName(), $newMeta->getFormName(), $params);
+  }
 
   # form
-  $params->{title} = '%MAKETEXT{"Form"}%';
-  $result .= _diffType($oldMeta, $newMeta, "FIELD", sub {
-    my $field = shift;
-    return $field->{value};
-  }, $params);
+  unless ($params->{exclude} && $params->{exclude} =~ /\bfields\b/) {
+    $params->{title} = '%MAKETEXT{"Form"}%';
+    $result .= _diffType($oldMeta, $newMeta, "FIELD", sub {
+      my $field = shift;
+      return $field->{value};
+    }, $params);
+  }
 
   # attachments
-  $params->{title} = '%MAKETEXT{"Attachments"}%';
-  $result .= _diffType($oldMeta, $newMeta, "FILEATTACHMENT", undef, $params);
+  unless ($params->{exclude} && $params->{exclude} =~ /\battachments\b/) {
+    $params->{title} = '%MAKETEXT{"Attachments"}%';
+    $result .= _diffType($oldMeta, $newMeta, "FILEATTACHMENT", undef, $params);
+  }
 
   # preferences
-  $params->{title} = '%MAKETEXT{"Preferences"}%';
-  $result .= _diffType($oldMeta, $newMeta, "PREFERENCE", undef, $params);
+  unless ($params->{exclude} && $params->{exclude} =~ /\bpreferences\b/) {
+    $params->{title} = '%MAKETEXT{"Preferences"}%';
+    $result .= _diffType($oldMeta, $newMeta, "PREFERENCE", undef, $params);
+  }
 
   # generic meta data
   my %metaTypes = ();
   $metaTypes{$_} = 1 for grep {!/^_|TOPICINFO|TOPICPARENT|FORM|FIELD|FILEATTACHMENT|PREFERENCE/} keys %$oldMeta;
   $metaTypes{$_} = 1 for grep {!/^_|TOPICINFO|TOPICPARENT|FORM|FIELD|FILEATTACHMENT|PREFERENCE/} keys %$newMeta;
   foreach my $type (sort keys %metaTypes) {
-    $params->{title} = '%MAKETEXT{"'.ucfirst(lc($type)).'"}%';
-    $result .= _diffType($oldMeta, $newMeta, $type, undef, $params);
+    unless ($params->{exclude} && $params->{exclude} =~ /\b$type\b/i) {
+      $params->{title} = '%MAKETEXT{"'.ucfirst(lc($type)).'"}%';
+      $result .= _diffType($oldMeta, $newMeta, $type, undef, $params);
+    }
   }
 
   return $result;
@@ -551,7 +586,7 @@ sub _diffLine {
   our @newDiff = ();
   our $prevLine = ['', '', ''];
 
-  sub _distribute {
+  sub _distribute { ## no critics
     return unless $prevLine->[0];
     if ($prevLine->[0] eq 'c') {
       # change

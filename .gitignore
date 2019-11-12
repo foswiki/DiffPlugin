@@ -3,6 +3,7 @@ igp_*
 *.gz
 *.swp
 pub/System/DiffPlugin/diff.css
+pub/System/DiffPlugin/diff.js
 /DiffPlugin.md5
 /DiffPlugin.sha1
 /DiffPlugin.tgz
@@ -10,3 +11,4 @@ pub/System/DiffPlugin/diff.css
 /DiffPlugin.zip
 /DiffPlugin_installer
 /DiffPlugin_installer.pl
+locale/**/*~

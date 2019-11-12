@@ -1,0 +1,73 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: lib/Foswiki/Plugins/DiffPlugin/Core.pm:438
+msgid "'.ucfirst(lc($type)).'"
+msgstr ""
+
+#: lib/Foswiki/Plugins/DiffPlugin/Core.pm:422
+msgid "Attachments"
+msgstr ""
+
+#: lib/Foswiki/Plugins/DiffPlugin/Core.pm:413
+msgid "Form"
+msgstr ""
+
+#: lib/Foswiki/Plugins/DiffPlugin/Core.pm:407
+msgid "Form Name"
+msgstr ""
+
+#: lib/Foswiki/Plugins/DiffPlugin/Core.pm:401
+msgid "Parent topic"
+msgstr ""
+
+#: lib/Foswiki/Plugins/DiffPlugin/Core.pm:428
+msgid "Preferences"
+msgstr ""
+
+#: templates/diff.tmpl:81 templates/diff.tmpl:94
+msgid "Revision"
+msgstr ""
+
+#: lib/Foswiki/Plugins/DiffPlugin/Core.pm:386
+msgid "Text"
+msgstr ""
+
+#: templates/diff.tmpl:63 templates/diff.tmpl:66
+msgid "most recent revision"
+msgstr ""
+
+#: templates/diff.tmpl:54 templates/diff.tmpl:57
+msgid "next revision"
+msgstr ""
+
+#: templates/diff.tmpl:143
+msgid "no differences where found"
+msgstr ""
+
+#: templates/diff.tmpl:36 templates/diff.tmpl:39
+msgid "oldest revision"
+msgstr ""
+
+#: templates/diff.tmpl:45 templates/diff.tmpl:48
+msgid "previous revision"
+msgstr ""
+
+#: templates/diff.tmpl:81 templates/diff.tmpl:94
+msgid "view this version"
+msgstr ""

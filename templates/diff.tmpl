@@ -1,14 +1,16 @@
 %TMPL:DEF{"diff"}%%DIFF{
-  newrev="%TMPL:P{"newrev"}%"
-  oldrev="%TMPL:P{"oldrev"}%"
-  context="%TMPL:P{"context"}%"
-  offset="%TMPL:P{"offset"}%"
+  newrev="%TMPL:P{"diff::newrev"}%"
+  oldrev="%TMPL:P{"diff::oldrev"}%"
+  context="%TMPL:P{"diff::context"}%"
+  offset="%TMPL:P{"diff::offset"}%"
+  exclude="%TMPL:P{"diff::exclude"}%"
 }%%TMPL:END%
 
-%TMPL:DEF{"newrev"}%%URLPARAM{"rev" default="%URLPARAM{"newrev" default="%URLPARAM{"rev1"}%"}%"}%%TMPL:END%
-%TMPL:DEF{"oldrev"}%%URLPARAM{"oldrev" default="%URLPARAM{"rev2"}%"}%%TMPL:END%
-%TMPL:DEF{"context"}%%URLPARAM{"context" default="2"}%%TMPL:END%
-%TMPL:DEF{"offset"}%%URLPARAM{"offset" default="1"}%%TMPL:END%
+%TMPL:DEF{"diff::newrev"}%%URLPARAM{"rev" default="%URLPARAM{"newrev" default="%URLPARAM{"rev1"}%"}%"}%%TMPL:END%
+%TMPL:DEF{"diff::oldrev"}%%URLPARAM{"oldrev" default="%URLPARAM{"rev2"}%"}%%TMPL:END%
+%TMPL:DEF{"diff::context"}%%URLPARAM{"context" default="2"}%%TMPL:END%
+%TMPL:DEF{"diff::offset"}%%URLPARAM{"offset" default="1"}%%TMPL:END%
+%TMPL:DEF{"diff::exclude"}%%URLPARAM{"exclude"}%%TMPL:END%
 
 %TMPL:DEF{"diff::control"}%<div class="foswikiDiffControl foswikiNormal jqUITooltip" data-theme="info" data-arrow="on" data-position="top">
 %TMPL:P{"diff::control::start"}%
@@ -31,37 +33,37 @@
 %TMPL:DEF{"diff::control::quit"}%<a href='%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%'>%TMPL:P{"diff::control::quit::icon"}%</a>%TMPL:END%
 
 %TMPL:DEF{"diff::control::start"}%%IF{"$oldrev>1"
-  then="<a href='%SCRIPTURLPATH{"diff"}%/%WEB%/%TOPIC%?rev=2&context=%TMPL:P{"context"}%&offset=$offset' title='%MAKETEXT{"Oldest revision"}%'>
+  then="<a href='%SCRIPTURLPATH{"diff"}%/%WEB%/%TOPIC%?rev=2&context=%TMPL:P{"context"}%&offset=$offset&exclude=$exclude' title='%MAKETEXT{"oldest revision"}%'>
           %TMPL:P{"diff::control::start::icon"}%
         </a>"
-  else="<a title='%MAKETEXT{"Oldest revision"}%' class='disabled'>
+  else="<a title='%MAKETEXT{"oldest revision"}%' class='disabled'>
           %TMPL:P{"diff::control::start::disabled::icon"}%
         </a>"
 }%%TMPL:END%
 
 %TMPL:DEF{"diff::control::prev"}%%IF{"$oldrev>1"
-  then="<a href='%SCRIPTURLPATH{"diff"}%/%WEB%/%TOPIC%?rev=$oldrev&context=%TMPL:P{"context"}%&offset=$offset' title='%MAKETEXT{"Previous revision"}%'>
+  then="<a href='%SCRIPTURLPATH{"diff"}%/%WEB%/%TOPIC%?rev=$oldrev&context=%TMPL:P{"context"}%&offset=$offset&exclude=$exclude' title='%MAKETEXT{"previous revision"}%'>
           %TMPL:P{"diff::control::prev::icon"}%
         </a>"
-  else="<a title='%MAKETEXT{"Previous revision"}%' class='disabled'>
+  else="<a title='%MAKETEXT{"previous revision"}%' class='disabled'>
           %TMPL:P{"diff::control::prev::disabled::icon"}%
         </a>"
 }%%TMPL:END%
 
 %TMPL:DEF{"diff::control::next"}%%IF{"$newrev<$maxrev"
-  then="<a href='%SCRIPTURLPATH{"diff"}%/%WEB%/%TOPIC%?rev=$nextrev&context=%TMPL:P{"context"}%&offset=$offset' title='%MAKETEXT{"Next revision"}%'>
+  then="<a href='%SCRIPTURLPATH{"diff"}%/%WEB%/%TOPIC%?rev=$nextrev&context=%TMPL:P{"context"}%&offset=$offset&exclude=$exclude' title='%MAKETEXT{"next revision"}%'>
           %TMPL:P{"diff::control::next::icon"}%
         </a>"
-  else="<a title='%MAKETEXT{"Next revision"}%' class='disabled'>
+  else="<a title='%MAKETEXT{"next revision"}%' class='disabled'>
           %TMPL:P{"diff::control::next::disabled::icon"}%
         </a>"
 }%%TMPL:END%
 
 %TMPL:DEF{"diff::control::end"}%%IF{"$newrev<$maxrev"
-  then="<a href='%SCRIPTURLPATH{"diff"}%/%WEB%/%TOPIC%?rev=$maxrev&context=%TMPL:P{"context"}%&offset=$offset' title='%MAKETEXT{"Most recent revision"}%'>
+  then="<a href='%SCRIPTURLPATH{"diff"}%/%WEB%/%TOPIC%?rev=$maxrev&context=%TMPL:P{"context"}%&offset=$offset&exclude=$exclude' title='%MAKETEXT{"most recent revision"}%'>
           %TMPL:P{"diff::control::end::icon"}%
         </a>"
-  else="<a title='%MAKETEXT{"Most recent revision"}%' class='disabled'>
+  else="<a title='%MAKETEXT{"most recent revision"}%' class='disabled'>
           %TMPL:P{"diff::control::end::disabled::icon"}%
         </a>"
 }%%TMPL:END%
@@ -70,39 +72,44 @@
   then="<nop>$oldweb.$oldtopic vs <nop>$newweb.$newtopic"
   else="[[$oldweb.$oldtopic]]"
 }% %TMPL:P{"diff::control"}% </h1>
-<div class='foswikiDiffContainer'>
+<div class="foswikiDiffContainer" data-max-rev="$maxrev">
 <table>
   <thead> 
     <tr>
       <th class='old'>
         <h2>
-          %MAKETEXT{"<a href='[_1]'>Revision [_2]</a>" args="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?rev=$oldrev,$oldrev"}%
+          <a href='%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?rev=$oldrev' title='%MAKETEXT{"view this version"}%'>%MAKETEXT{"Revision"}%</a>
+          <select name="oldrev" class="foswikiDiffSelect foswikiNormal">
+            <option>$oldrev</option>
+          </select>
+          <span class='foswikiGrayText foswikiNormal'>
+            %JQICON{"fa-calendar"}% $olddate |
+            %JQICON{"fa-user"}% [[%USERSWEB%.$oldauthor]]
+          </span>
         </h2>
-        <div class='foswikiGrayText'>
-          %JQICON{"fa-calendar"}% $olddate |
-          %JQICON{"fa-user"}% [[%USERSWEB%.$oldauthor]]
-        </div>
       </th>
       <th class='index'></th>
       <th class='new'>
         <h2>
-          %MAKETEXT{"<a href='[_1]'>Revision [_2]</a>" args="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?rev=$newrev,$newrev"}%
+          <a href='%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?rev=$newrev' title='%MAKETEXT{"view this version"}%'>%MAKETEXT{"Revision"}%</a>
+          <select name="newrev" class="foswikiDiffSelect foswikiNormal">
+            <option>$newrev</option>
+          </select>
+          <span class='foswikiGrayText foswikiNormal'>
+            %JQICON{"fa-calendar"}% $newdate |
+            %JQICON{"fa-user"}% [[%USERSWEB%.$newauthor]]
+          </span>
         </h2>
-        <div class='foswikiGrayText'>
-          %JQICON{"fa-calendar"}% $newdate |
-          %JQICON{"fa-user"}% [[%USERSWEB%.$newauthor]]
-        </div>
       </th>
     </tr>
   </thead>
 </table>
-</div>
 %TABPANE{class="plain" animate="on"}%%TMPL:END%
 
 %TMPL:DEF{"diff::aftertext"}%%ENDTABPANE%%TMPL:END%
 
 %TMPL:DEF{"diff::header"}%%TAB{"$title"}%
-<div class='foswikiDiffContainer $type'>
+<div class='foswikiDiffType $type'>
 <table>
   <tbody>
 %TMPL:END%

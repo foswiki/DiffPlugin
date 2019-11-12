@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ProjectContributor" comment="" date="1540458596" format="1.1" version="1"}%
+%META:TOPICINFO{author="ProjectContributor" comment="" date="1573550824" format="1.1" version="1"}%
 ---+!! %TOPIC%
 %FORMFIELD{"Description"}%
 
@@ -54,6 +54,7 @@ as a fallback in case the parameter wasn't specified as part of the =%DIFF= macr
 | =meta_format= | format to be used to display meta data | =diff::meta_format= | 
 | =separator= | separator between rows of a diff table | =diff::separator= | 
 | =no_differences= | message to be displayed when no differences have been found | =diff::no_differences= |
+| =exclude= | list of parts to exclude from being diffed, e.g. =parent=, =form=, =fields=, =attachments=, =preferences=, =listy= | |
 
 The format strings can take a number of variables refering to the properties of the objects being processed:
 
@@ -75,6 +76,7 @@ The format strings can take a number of variables refering to the properties of 
    * =$maxrev=: alias for =$maxnewrev=
    * =$prevrev=: previous revision id
    * =$nextrev=: next revision id
+   * =$exclude: parts that are excluded from diffing
 
    * =$old=: displays the difference of the current row being formatted in the column left column
    * =$new=: displays the difference of the current row being formatted in the column right column
@@ -112,6 +114,7 @@ scripts with a call to =diff=.
 
 ---++ Change History
 %TABLE{columnwidths="7em" tablewidth="100%"}%
+|  12 Nov 2019 | improve ui diffing revisions; added option to exclude certain parts; log diff event | 
 |  25 Oct 2018 | implement a separate DIFFCONTROL macro; separate diff.tmpl and diffview.tmpl |
 |  11 Jun 2018 | fix changes not displayed under certain conditions |
 |  09 Jan 2018 | throw an access exception instead of showing an inline error diffing revisions |
@@ -123,8 +126,8 @@ scripts with a call to =diff=.
 %META:FIELD{name="Release" title="Release" value="%25$RELEASE%25"}%
 %META:FIELD{name="Description" title="Description" value="%25$SHORTDESCRIPTION%25"}%
 %META:FIELD{name="Repository" title="Repository" value="https://github.com/foswiki/%25$ROOTMODULE%25"}%
-%META:FIELD{name="Copyright" title="Copyright" value="2016-2018 Michael Daum http://michaeldaumconsulting.com"}%
+%META:FIELD{name="Copyright" title="Copyright" value="2016-2019 Michael Daum http://michaeldaumconsulting.com"}%
 %META:FIELD{name="License" title="License" value="GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]])"}%
 %META:FIELD{name="Home" title="Home" value="https://foswiki.org/Extensions/%25$ROOTMODULE%25"}%
 %META:FIELD{name="Support" title="Support" value="https://foswiki.org/Support/%25$ROOTMODULE%25"}%
-%META:FILEATTACHMENT{name="DiffScreenshot.png" attachment="DiffScreenshot.png" attr="" comment="" date="1540458596" size="112670" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="DiffScreenshot.png" attachment="DiffScreenshot.png" attr="" comment="" date="1573550824" size="113759" user="ProjectContributor" version="1"}%

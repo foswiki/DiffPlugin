@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 #
-# DiffPlugin is Copyright (C) 2016-2018 Michael Daum http://michaeldaumconsulting.com
+# DiffPlugin is Copyright (C) 2016-2019 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,10 +19,9 @@ use strict;
 use warnings;
 
 use Foswiki::Func ();
-#use Foswiki::Plugins::DiffPlugin::Core(); # only enable during development of DiffPlugin
 
-our $VERSION = '2.01';
-our $RELEASE = '25 Oct 2018';
+our $VERSION = '3.00';
+our $RELEASE = '12 Nov 2019';
 our $SHORTDESCRIPTION = 'Compare difference between topics and revisions';
 our $NO_PREFS_IN_TOPIC = 1;
 our $core;
@@ -59,7 +58,10 @@ sub getCore {
 
 
 sub finishPlugin {
-  undef $core;
+  if ($core) {
+    $core->finish();
+    undef $core;
+  }
 }
 
 1;
