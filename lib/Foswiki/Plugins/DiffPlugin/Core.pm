@@ -66,7 +66,7 @@ sub addAssets {
   $this->{_doneAssets} = 1;
 
   Foswiki::Func::addToZone('head', 'DIFFPLUGIN', '<link rel="stylesheet" type="text/css" href="%PUBURLPATH%/System/DiffPlugin/diff.css" media="all" />');
-  Foswiki::Func::addToZone('script', 'DIFFPLUGIN', '<script src="%PUBURLPATH%/System/DiffPlugin/diff.js" media="all" ></script>');
+  Foswiki::Func::addToZone('script', 'DIFFPLUGIN', '<script src="%PUBURLPATH%/System/DiffPlugin/diff.js" media="all" ></script>', 'JQUERYPLUGIN::FOSWIKI');
 }
 
 sub handleDiffScript {

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ProjectContributor" comment="" date="1573550824" format="1.1" version="1"}%
+%META:TOPICINFO{author="ProjectContributor" comment="" date="1574872026" format="1.1" version="1"}%
 ---+!! %TOPIC%
 %FORMFIELD{"Description"}%
 
@@ -114,6 +114,7 @@ scripts with a call to =diff=.
 
 ---++ Change History
 %TABLE{columnwidths="7em" tablewidth="100%"}%
+|  27 Nov 2019 | fixed js error in diff interface |
 |  12 Nov 2019 | improve ui diffing revisions; added option to exclude certain parts; log diff event | 
 |  25 Oct 2018 | implement a separate DIFFCONTROL macro; separate diff.tmpl and diffview.tmpl |
 |  11 Jun 2018 | fix changes not displayed under certain conditions |
@@ -130,4 +131,4 @@ scripts with a call to =diff=.
 %META:FIELD{name="License" title="License" value="GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]])"}%
 %META:FIELD{name="Home" title="Home" value="https://foswiki.org/Extensions/%25$ROOTMODULE%25"}%
 %META:FIELD{name="Support" title="Support" value="https://foswiki.org/Support/%25$ROOTMODULE%25"}%
-%META:FILEATTACHMENT{name="DiffScreenshot.png" attachment="DiffScreenshot.png" attr="" comment="" date="1573550824" size="113759" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="DiffScreenshot.png" attachment="DiffScreenshot.png" attr="" comment="" date="1574872026" size="113759" user="ProjectContributor" version="1"}%

@@ -20,8 +20,8 @@ use warnings;
 
 use Foswiki::Func ();
 
-our $VERSION = '3.00';
-our $RELEASE = '12 Nov 2019';
+our $VERSION = '3.01';
+our $RELEASE = '27 Nov 2019';
 our $SHORTDESCRIPTION = 'Compare difference between topics and revisions';
 our $NO_PREFS_IN_TOPIC = 1;
 our $core;
