@@ -1,4 +1,4 @@
-.foswikiDiffContainer {
+.foswikiDiffContainer .jqTabPane {
   font-size:90%;
 }
 .foswikiDiffContainer table {
@@ -35,13 +35,13 @@
 
 .foswikiDiffContainer th {
   font-weight:normal;
-  padding-top:2em;
-  padding-bottom:2em;
+  padding-top:1.5em;
+  padding-bottom:1.5em;
+  vertical-align:top;
 }
 .foswikiDiffContainer th h2 {
   border:0;
-  margin:0 0.7em 0 0;
-  line-height: 20px;
+  margin:0 0 0.5em;
 }
 .foswikiDiffContainer th h2 select {
   margin:0 1em 0 0.5em; 

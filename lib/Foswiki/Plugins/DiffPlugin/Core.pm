@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 #
-# DiffPlugin is Copyright (C) 2016-2019 Michael Daum http://michaeldaumconsulting.com
+# DiffPlugin is Copyright (C) 2016-2020 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -180,19 +180,21 @@ sub _getOpts {
 sub _expandVars {
   my ($this, $format, $opts) = @_;
 
+  my $dateTimeFormat = $Foswiki::cfg{DateManipPlugin}{DefaultDateTimeFormat} || $Foswiki::cfg{DefaultDateFormat};
+
   $format =~ s/\$oldrev/$opts->{oldRev}/g;
   $format =~ s/\$maxoldrev/$opts->{maxOldRev}/g;
   $format =~ s/\$oldweb/$opts->{oldWeb}/g;
   $format =~ s/\$oldtopic/$opts->{oldTopic}/g;
   $format =~ s/\$oldauthor/$opts->{oldAuthor}/g;
-  $format =~ s/\$olddate/Foswiki::Time::formatTime($opts->{oldDate})/ge;
+  $format =~ s/\$olddate/Foswiki::Time::formatTime($opts->{oldDate}, $dateTimeFormat)/ge;
 
   $format =~ s/\$newrev/$opts->{newRev}/g;
   $format =~ s/\$maxnewrev/$opts->{maxOldRev}/g;
   $format =~ s/\$newweb/$opts->{newWeb}/g;
   $format =~ s/\$newtopic/$opts->{newTopic}/g;
   $format =~ s/\$newauthor/$opts->{newAuthor}/g;
-  $format =~ s/\$newdate/Foswiki::Time::formatTime($opts->{newDate})/ge;
+  $format =~ s/\$newdate/Foswiki::Time::formatTime($opts->{newDate}, $dateTimeFormat)/ge;
 
   $format =~ s/\$rev/$opts->{newRev}/g;
   $format =~ s/\$maxrev/$opts->{maxNewRev}/g;
@@ -469,8 +471,8 @@ sub _diffType {
     my $action = '';
 
     $index++;
-    my $oldField = $oldMeta->get($type, $fieldName);
-    my $newField = $newMeta->get($type, $fieldName);
+    my $oldField = $oldMeta->get($type, $fieldName eq ''? undef: $fieldName);
+    my $newField = $newMeta->get($type, $fieldName eq ''? undef: $fieldName);
 
     if ($oldField) {
       my $oldVal = &$getValue($oldField);

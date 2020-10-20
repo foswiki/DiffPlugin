@@ -33,7 +33,7 @@
 %TMPL:DEF{"diff::control::quit"}%<a href='%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%'>%TMPL:P{"diff::control::quit::icon"}%</a>%TMPL:END%
 
 %TMPL:DEF{"diff::control::start"}%%IF{"$oldrev>1"
-  then="<a href='%SCRIPTURLPATH{"diff"}%/%WEB%/%TOPIC%?rev=2&context=%TMPL:P{"context"}%&offset=$offset&exclude=$exclude' title='%MAKETEXT{"oldest revision"}%'>
+  then="<a href='%SCRIPTURLPATH{"diff"}%/%WEB%/%TOPIC%?rev=2&context=%TMPL:P{"context"}%&offset=$offset&exclude=$exclude' title='%MAKETEXT{"oldest revision"}%' accesskey='a'>
           %TMPL:P{"diff::control::start::icon"}%
         </a>"
   else="<a title='%MAKETEXT{"oldest revision"}%' class='disabled'>
@@ -42,7 +42,7 @@
 }%%TMPL:END%
 
 %TMPL:DEF{"diff::control::prev"}%%IF{"$oldrev>1"
-  then="<a href='%SCRIPTURLPATH{"diff"}%/%WEB%/%TOPIC%?rev=$oldrev&context=%TMPL:P{"context"}%&offset=$offset&exclude=$exclude' title='%MAKETEXT{"previous revision"}%'>
+  then="<a href='%SCRIPTURLPATH{"diff"}%/%WEB%/%TOPIC%?rev=$oldrev&context=%TMPL:P{"context"}%&offset=$offset&exclude=$exclude' title='%MAKETEXT{"previous revision"}%' accesskey='s'>
           %TMPL:P{"diff::control::prev::icon"}%
         </a>"
   else="<a title='%MAKETEXT{"previous revision"}%' class='disabled'>
@@ -51,7 +51,7 @@
 }%%TMPL:END%
 
 %TMPL:DEF{"diff::control::next"}%%IF{"$newrev<$maxrev"
-  then="<a href='%SCRIPTURLPATH{"diff"}%/%WEB%/%TOPIC%?rev=$nextrev&context=%TMPL:P{"context"}%&offset=$offset&exclude=$exclude' title='%MAKETEXT{"next revision"}%'>
+  then="<a href='%SCRIPTURLPATH{"diff"}%/%WEB%/%TOPIC%?rev=$nextrev&context=%TMPL:P{"context"}%&offset=$offset&exclude=$exclude' title='%MAKETEXT{"next revision"}%' accesskey='d'>
           %TMPL:P{"diff::control::next::icon"}%
         </a>"
   else="<a title='%MAKETEXT{"next revision"}%' class='disabled'>
@@ -60,7 +60,7 @@
 }%%TMPL:END%
 
 %TMPL:DEF{"diff::control::end"}%%IF{"$newrev<$maxrev"
-  then="<a href='%SCRIPTURLPATH{"diff"}%/%WEB%/%TOPIC%?rev=$maxrev&context=%TMPL:P{"context"}%&offset=$offset&exclude=$exclude' title='%MAKETEXT{"most recent revision"}%'>
+  then="<a href='%SCRIPTURLPATH{"diff"}%/%WEB%/%TOPIC%?rev=$maxrev&context=%TMPL:P{"context"}%&offset=$offset&exclude=$exclude' title='%MAKETEXT{"most recent revision"}%' accesskey='f'>
           %TMPL:P{"diff::control::end::icon"}%
         </a>"
   else="<a title='%MAKETEXT{"most recent revision"}%' class='disabled'>
@@ -74,7 +74,7 @@
 }% %TMPL:P{"diff::control"}% </h1>
 <div class="foswikiDiffContainer" data-max-rev="$maxrev">
 <table>
-  <thead> 
+  <thead>
     <tr>
       <th class='old'>
         <h2>
@@ -87,6 +87,7 @@
             %JQICON{"fa-user"}% [[%USERSWEB%.$oldauthor]]
           </span>
         </h2>
+        %TMPL:P{context="RevCommentPluginEnabled" then="diff::revcomment" rev="$oldrev"}%<!-- -->
       </th>
       <th class='index'></th>
       <th class='new'>
@@ -100,11 +101,16 @@
             %JQICON{"fa-user"}% [[%USERSWEB%.$newauthor]]
           </span>
         </h2>
+        %TMPL:P{context="RevCommentPluginEnabled" then="diff::revcomment" rev="$newrev"}%<!-- -->
       </th>
     </tr>
   </thead>
 </table>
-%TABPANE{class="plain" animate="on"}%%TMPL:END%
+%TABPANE{class="plain" animate="on" remember="on"}%%TMPL:END%
+
+%TMPL:DEF{"diff::revcomment"}%%REVCOMMENT{rev="%rev%"
+  format="<div class='foswikiDiffRevComment'><b>%MAKETEXT{"Comment"}%:</b> $text</div>"
+}%%TMPL:END%
 
 %TMPL:DEF{"diff::aftertext"}%%ENDTABPANE%%TMPL:END%
 
@@ -129,12 +135,12 @@
 %TMPL:DEF{"diff::meta_format"}%<literal>
     <tr class='$action'>
       <td class='old'>
-        <b>$name:</b>
+        %IF{"'$name'!=''" then="<b>$name:</b>" else="<!-- -->"}%
         <pre>$old</pre>
       </td>
       <td class='index'></td>
       <td class='new'>
-        <b>$name:</b>
+        %IF{"'$name'!=''" then="<b>$name:</b>" else="<!-- -->"}%
         <pre>$new</pre>
       </td>
     </tr>
