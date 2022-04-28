@@ -27,7 +27,7 @@
 }
 
 .foswikiDiffControl a:hover {
-  background-color:#2375c5;
+  background-color: var(--color-hover-background, #2375c5);
 }
 .foswikiDiffControl a.disabled:hover {
   background-color:transparent;
@@ -60,6 +60,10 @@
   padding:0;
   margin:0;
   border:0;
+  color:#333;
+}
+.foswikiDiffContainer .unchanged pre {
+  color: var(--color-foreground, #333);
 }
 
 .foswikiDiffContainer .old,
@@ -69,7 +73,7 @@
 
 .foswikiDiffContainer td.old,
 .foswikiDiffContainer td.new {
-  background-color:#f5f5f5;
+  background-color: var(--alt-background, #f5f5f5);
 }
 
 .foswikiDiffContainer .index {
@@ -83,6 +87,10 @@
 .foswikiDiffContainer ins,
 .foswikiDiffContainer del {
   text-decoration: none;
+}
+
+.foswikiDiffContainer b {
+  color: var(--color-h2, inherit);
 }
 
 .foswikiDiffContainer .changed .old { background-color:#FCEBED; }

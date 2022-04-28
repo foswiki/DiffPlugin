@@ -12,6 +12,6 @@ $Foswiki::cfg{SwitchBoard}{diff} = {
 
 # **BOOLEAN**
 # Replace calls to the <code>rdiff</code> and <code>compare</code> scripts with <code>diff</code> 
-$Foswiki::cfg{DiffPlugin}{PatchDiffScript} = 1;
+$Foswiki::cfg{DiffPlugin}{PatchDiffScript} = 0;
 
 1;

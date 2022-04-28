@@ -114,6 +114,7 @@ scripts with a call to =diff=.
 
 ---++ Change History
 %TABLE{columnwidths="7em" tablewidth="100%"}%
+|  28 Apr 2022 | don't patch scripts from compare, rdiff to diff by default for performance reasons |
 |  20 Oct 2020 | display dates _and_ time of changes; added support for Foswiki:Extensions/RevCommentPlugin |
 |  27 Nov 2019 | fixed js error in diff interface |
 |  12 Nov 2019 | improve ui diffing revisions; added option to exclude certain parts; log diff event | 
@@ -128,7 +129,7 @@ scripts with a call to =diff=.
 %META:FIELD{name="Release" title="Release" value="%25$RELEASE%25"}%
 %META:FIELD{name="Description" title="Description" value="%25$SHORTDESCRIPTION%25"}%
 %META:FIELD{name="Repository" title="Repository" value="https://github.com/foswiki/%25$ROOTMODULE%25"}%
-%META:FIELD{name="Copyright" title="Copyright" value="2016-2020 Michael Daum"}%
+%META:FIELD{name="Copyright" title="Copyright" value="2016-2022 Michael Daum"}%
 %META:FIELD{name="License" title="License" value="GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]])"}%
 %META:FIELD{name="Home" title="Home" value="https://foswiki.org/Extensions/%25$ROOTMODULE%25"}%
 %META:FIELD{name="Support" title="Support" value="https://foswiki.org/Support/%25$ROOTMODULE%25"}%
