@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 #
-# DiffPlugin is Copyright (C) 2016-2022 Michael Daum http://michaeldaumconsulting.com
+# DiffPlugin is Copyright (C) 2016-2024 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,9 +19,9 @@ use strict;
 use warnings;
 
 BEGIN {
-  eval "use Algorithm::Diff::XS qw( sdiff )"; ## no critics
+  eval "use Algorithm::Diff::XS qw( sdiff )";
   if ($@) {
-    eval "use Algorithm::Diff qw( sdiff )";  ## no critics
+    eval "use Algorithm::Diff qw( sdiff )";
     die $@ if $@;
   }
 }

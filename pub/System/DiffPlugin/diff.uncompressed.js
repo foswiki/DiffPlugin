@@ -1,7 +1,7 @@
 /*
  * diff plugin 1.0
  *
- * Copyright (c) 2019-2020 Michael Daum https://michaeldaumconsulting.com
+ * Copyright (c) 2019-2024 Michael Daum https://michaeldaumconsulting.com
  *
  * Licensed under the GPL licenses http://www.gnu.org/licenses/gpl.html
  *
