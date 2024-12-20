@@ -20,7 +20,7 @@ use warnings;
 
 use Foswiki::Func ();
 
-our $VERSION = '3.12';
+our $VERSION = '3.13';
 our $RELEASE = '%$RELEASE%';
 our $SHORTDESCRIPTION = 'Compare difference between topics and revisions';
 our $LICENSECODE = '%$LICENSECODE%';

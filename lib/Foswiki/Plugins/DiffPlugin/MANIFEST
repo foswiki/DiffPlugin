@@ -5,6 +5,7 @@ data/System/DiffPlugin.txt 0644
 lib/Foswiki/Plugins/DiffPlugin/Config.spec 0644
 lib/Foswiki/Plugins/DiffPlugin/Core.pm 0644
 lib/Foswiki/Plugins/DiffPlugin/DEPENDENCIES 0644
+lib/Foswiki/Plugins/DiffPlugin/MANIFEST 0644
 lib/Foswiki/Plugins/DiffPlugin.pm 0644
 locale/DiffPlugin/bg.po 0644
 locale/DiffPlugin/cs.po 0644

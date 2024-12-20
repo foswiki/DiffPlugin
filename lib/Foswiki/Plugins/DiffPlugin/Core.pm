@@ -19,9 +19,9 @@ use strict;
 use warnings;
 
 BEGIN {
-  eval "use Algorithm::Diff::XS qw( sdiff )";
+  eval { use Algorithm::Diff::XS qw( sdiff ) };
   if ($@) {
-    eval "use Algorithm::Diff qw( sdiff )";
+    eval { use Algorithm::Diff qw( sdiff ) };
     die $@ if $@;
   }
 }

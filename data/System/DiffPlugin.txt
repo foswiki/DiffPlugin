@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ProjectContributor" comment="" date="1574872026" format="1.1" version="1"}%
+%META:TOPICINFO{author="ProjectContributor" comment="" date="1734686167" format="1.1" version="1"}%
 ---+!! %TOPIC%
 %FORMFIELD{"Description"}%
 
@@ -12,10 +12,6 @@ i.e. Foswiki's core =rdiff= as well as the <nop>CompareRevisionsAddOn's =compare
 to previous work, <nop>%TOPIC% tries to display differences in a way users _really_ can see what the difference
 actually is. It takes particularly care of any kind of meta data stored in a topic and diff these individually.
 <nop>%TOPIC% implements a =%DIFF= macro so that you can use it in wiki applications easily. 
-
-It integrates well with [[Foswiki:Extensions/AngularSkin][AngularSkin]]/[[Foswiki:Extensions/AngularPlugin][AngularPlugin]]
-so that browsing among differences using the "tape-recorder" navigation feels most natural while going forward and backwards
-between revisions.
 
 ---++ Examples
 
@@ -100,7 +96,7 @@ Note that when =format= is given =template= is ignored. =template= basically is 
 ---++ Configuration
 
 <nop>%TOPIC% comes with two scripts that may be used in your web-server environment - =diff= and =diffauth= - that can be used similar to =rdiff= and =rdiffauth=. No additional provisions
-are required when using [[Foswiki:Extensions/FastCGIEngineContrib][FastCGIEngineContrib]] or any other persistent-perl environment where Foswiki's ={SwitchBoard}= mechanism is used to
+are required when using [[https://foswiki.org/Extensions/FastCGIEngineContrib][FastCGIEngineContrib]] or any other persistent-perl environment where Foswiki's ={SwitchBoard}= mechanism is used to
 schedule the =diff= action to this plugin.
 
 To integrate <nop>%TOPIC% into the installed skin you may replace any call to =rdiff= with =diff=, or enable the ={PatchDiffScript}= to automatically replace any use of the =rdiff= or =compare=
@@ -134,4 +130,4 @@ scripts with a call to =diff=.
 %META:FIELD{name="License" title="License" value="GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]])"}%
 %META:FIELD{name="Home" title="Home" value="https://foswiki.org/Extensions/%25$ROOTMODULE%25"}%
 %META:FIELD{name="Support" title="Support" value="https://foswiki.org/Support/%25$ROOTMODULE%25"}%
-%META:FILEATTACHMENT{name="DiffScreenshot.png" attachment="DiffScreenshot.png" attr="" comment="" date="1574872026" size="113759" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="DiffScreenshot.png" attachment="DiffScreenshot.png" attr="" comment="" date="1734686167" size="113759" user="ProjectContributor" version="1"}%
