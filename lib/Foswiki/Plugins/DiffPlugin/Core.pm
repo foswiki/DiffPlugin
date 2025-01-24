@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 #
-# DiffPlugin is Copyright (C) 2016-2024 Michael Daum http://michaeldaumconsulting.com
+# DiffPlugin is Copyright (C) 2016-2025 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -65,8 +65,8 @@ sub addAssets {
   return if $this->{_doneAssets};
   $this->{_doneAssets} = 1;
 
-  Foswiki::Func::addToZone('head', 'DIFFPLUGIN', '<link rel="stylesheet" type="text/css" href="%PUBURLPATH%/System/DiffPlugin/diff.css" media="all" />');
-  Foswiki::Func::addToZone('script', 'DIFFPLUGIN', '<script src="%PUBURLPATH%/System/DiffPlugin/diff.js" media="all" ></script>', 'JQUERYPLUGIN::FOSWIKI');
+  Foswiki::Func::addToZone('head', 'DIFFPLUGIN', '<link rel="stylesheet" type="text/css" href="%PUBURLPATH%/System/DiffPlugin/build/diff.css" media="all" />');
+  Foswiki::Func::addToZone('script', 'DIFFPLUGIN', '<script src="%PUBURLPATH%/System/DiffPlugin/build/diff.js" media="all" ></script>', 'JQUERYPLUGIN::FOSWIKI');
 }
 
 sub handleDiffScript {

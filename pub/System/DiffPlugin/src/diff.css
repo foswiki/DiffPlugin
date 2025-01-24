@@ -1,0 +1,187 @@
+:root {
+  --diff-foreground:var(--color-foreground, #333);
+  --diff-background:var(--alt-background, #f5f5f5);
+
+  --diff-old-background: #FCEBED;
+  --diff-old-foreground: #333;
+  --diff-old-marked: #FFD3D8;
+
+  --diff-new-background:#CCF7CC; 
+  --diff-new-foreground:#333; 
+  --diff-new-marked:#ACE2AC; 
+
+  --diff-heading-foreground: var(--color-foreground, #333);
+
+}
+:root[data-theme='dark'] {
+  --diff-old-background:#dbbdc1;
+  --diff-old-marked:#d59ca4;
+  --diff-new-background:#9acd9a;
+  --diff-new-marked:#78b778;
+  --diff-heading-foreground: var(--color-background, #333);
+}
+
+.foswikiDiffContainer .jqTabPane {
+  font-size:90%;
+}
+.foswikiDiffContainer table {
+  width:100%;
+  table-layout:fixed;
+}
+.foswikiDiffContainer td {
+  padding:0.5em;
+  vertical-align:top;
+  overflow:hidden;
+}
+
+.foswikiDiffControl {
+  float:right;
+}
+
+.foswikiDiffControl a {
+  display:inline-block;
+  padding:3px;
+  margin:0 0 0 6px;
+  line-height:1;
+}
+
+.foswikiDiffControl a img {
+  vertical-align:middle;
+}
+
+.foswikiDiffControl a:hover {
+  background-color: var(--color-hover-background, #2375c5);
+}
+.foswikiDiffControl a.disabled:hover {
+  background-color:transparent;
+}
+
+.foswikiDiffContainer th {
+  font-weight:normal;
+  padding-top:1.5em;
+  padding-bottom:1.5em;
+  vertical-align:top;
+}
+.foswikiDiffContainer th h2 {
+  border:0;
+  margin:0 0 0.5em;
+}
+.foswikiDiffContainer th h2 select {
+  margin:0 1em 0 0.5em; 
+}
+.foswikiDiffContainer th .foswikiGrayText {
+  line-height: 20px;
+}
+.foswikiDiffContainer th a {
+  text-decoration:none;
+}
+
+.foswikiDiffContainer pre {
+  white-space:pre-wrap;
+  word-break:break-all;
+  background:transparent;
+  padding:0;
+  margin:0;
+  border:0;
+}
+
+.foswikiDiffContainer .old,
+.foswikiDiffContainer .new {
+  width:48%;
+}
+
+.foswikiDiffContainer td.old,
+.foswikiDiffContainer td.new {
+  background-color: var(--diff-background);
+}
+
+.foswikiDiffContainer .index {
+  font-weight:bold;
+  text-align:center;
+  padding:0.5em 0;
+}
+
+.foswikiDiffContainer b {
+  color: var(--diff-heading-foreground);
+}
+.foswikiDiffContainer .new b {
+  background:var(--diff-new-marked);
+  margin: -0.5em -0.5em 0.5em -0.5em;
+  display: block;
+  padding: 0.5em;
+}
+.foswikiDiffContainer .old b {
+  background:var(--diff-old-marked);
+  margin: -0.5em -0.5em 0.5em -0.5em;
+  display: block;
+  padding: 0.5em;
+}
+
+
+.foswikiDiffContainer .removed .new,
+.foswikiDiffContainer .append .old {
+  border:0;
+  background:transparent;
+}
+
+.foswikiDiffContainer ins {
+  text-decoration: none;
+  background:var(--diff-new-background);
+  color:var(--diff-new-foreground);
+}
+.foswikiDiffContainer del {
+  text-decoration: none;
+  background:var(--diff-old-background);
+  color:var(--diff-old-foreground);
+}
+
+.foswikiDiffContainer .removed .new,
+.foswikiDiffContainer .append .old { 
+  visibility:hidden;
+}
+
+/* unchanged */
+.foswikiDiffContainer .unchanged pre {
+  color:var(--diff-foreground);
+}
+.foswikiDiffContainer .unchanged .index span {
+  visibility:hidden;
+}
+
+/* changed */
+.foswikiDiffContainer .changed .old { 
+  background-color:var(--diff-old-background); 
+  color:var(--diff-old-foreground); 
+}
+.foswikiDiffContainer .changed .old pre {
+  color:var(--diff-old-foreground); 
+}
+.foswikiDiffContainer .changed .old del { 
+  background-color:var(--diff-old-marked); 
+}
+.foswikiDiffContainer .changed .new { 
+  background-color:var(--diff-new-background); 
+  color:var(--diff-new-foreground); 
+}
+.foswikiDiffContainer .changed .new pre {
+  color:var(--diff-new-foreground); 
+}
+.foswikiDiffContainer .changed .new ins { 
+  background-color:var(--diff-new-marked);
+}
+
+/* append */
+.foswikiDiffContainer .removed .old {
+  background-color:var(--diff-old-background);
+  color:var(--diff-old-foreground); 
+}
+.foswikiDiffContainer .append .old pre {
+  color:var(--diff-old-foreground); 
+}
+.foswikiDiffContainer .append .new {
+  background-color:var(--diff-new-background);
+  color:var(--diff-new-foreground); 
+}
+.foswikiDiffContainer .append .new pre {
+  color:var(--diff-new-foreground); 
+}

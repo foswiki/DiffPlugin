@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ProjectContributor" comment="" date="1734686167" format="1.1" version="1"}%
+%META:TOPICINFO{author="ProjectContributor" comment="" date="1737742515" format="1.1" version="1"}%
 ---+!! %TOPIC%
 %FORMFIELD{"Description"}%
 
@@ -110,6 +110,7 @@ scripts with a call to =diff=.
 
 ---++ Change History
 %TABLE{columnwidths="7em" tablewidth="100%"}%
+|  24 Jan 2025 | added support for dark and light mode |
 |  19 Jan 2024 | minor code improvements |
 |  28 Apr 2022 | don't patch scripts from compare, rdiff to diff by default for performance reasons |
 |  20 Oct 2020 | display dates _and_ time of changes; added support for Foswiki:Extensions/RevCommentPlugin |
@@ -126,8 +127,8 @@ scripts with a call to =diff=.
 %META:FIELD{name="Release" title="Release" value="%25$RELEASE%25"}%
 %META:FIELD{name="Description" title="Description" value="%25$SHORTDESCRIPTION%25"}%
 %META:FIELD{name="Repository" title="Repository" value="https://github.com/foswiki/%25$ROOTMODULE%25"}%
-%META:FIELD{name="Copyright" title="Copyright" value="2016-2024 Michael Daum"}%
+%META:FIELD{name="Copyright" title="Copyright" value="2016-2025 Michael Daum"}%
 %META:FIELD{name="License" title="License" value="GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]])"}%
 %META:FIELD{name="Home" title="Home" value="https://foswiki.org/Extensions/%25$ROOTMODULE%25"}%
 %META:FIELD{name="Support" title="Support" value="https://foswiki.org/Support/%25$ROOTMODULE%25"}%
-%META:FILEATTACHMENT{name="DiffScreenshot.png" attachment="DiffScreenshot.png" attr="" comment="" date="1734686167" size="113759" user="ProjectContributor" version="1"}%
+%META:FILEATTACHMENT{name="DiffScreenshot.png" attachment="DiffScreenshot.png" attr="" comment="" date="1737742515" size="113759" user="ProjectContributor" version="1"}%
