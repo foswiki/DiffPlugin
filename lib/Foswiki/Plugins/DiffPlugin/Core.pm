@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 #
-# DiffPlugin is Copyright (C) 2016-2025 Michael Daum http://michaeldaumconsulting.com
+# DiffPlugin is Copyright (C) 2016-2026 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -65,7 +65,7 @@ sub addAssets {
   return if $this->{_doneAssets};
   $this->{_doneAssets} = 1;
 
-  Foswiki::Func::addToZone('head', 'DIFFPLUGIN', '<link rel="stylesheet" type="text/css" href="%PUBURLPATH%/System/DiffPlugin/build/diff.css" media="all" />');
+  Foswiki::Func::addToZone('head', 'DIFFPLUGIN', '<link rel="stylesheet" type="text/css" href="%PUBURLPATH%/System/DiffPlugin/build/diff.css" media="all">');
   Foswiki::Func::addToZone('script', 'DIFFPLUGIN', '<script src="%PUBURLPATH%/System/DiffPlugin/build/diff.js" media="all" ></script>', 'JQUERYPLUGIN::FOSWIKI');
 }
 
@@ -433,8 +433,8 @@ sub _diffMeta {
 
   # generic meta data
   my %metaTypes = ();
-  $metaTypes{$_} = 1 for grep {!/^_|TOPICINFO|TOPICPARENT|FORM|FIELD|FILEATTACHMENT|PREFERENCE/} keys %$oldMeta;
-  $metaTypes{$_} = 1 for grep {!/^_|TOPICINFO|TOPICPARENT|FORM|FIELD|FILEATTACHMENT|PREFERENCE/} keys %$newMeta;
+  $metaTypes{$_} = 1 for grep {!/^_|TOPICINFO|TOPICPARENT|FORM|FIELD|FILEATTACHMENT|PREFERENCE|REVCOMMENT/} keys %$oldMeta;
+  $metaTypes{$_} = 1 for grep {!/^_|TOPICINFO|TOPICPARENT|FORM|FIELD|FILEATTACHMENT|PREFERENCE|REVCOMMENT/} keys %$newMeta;
   foreach my $type (sort keys %metaTypes) {
     unless ($params->{exclude} && $params->{exclude} =~ /\b$type\b/i) {
       $params->{title} = '%MAKETEXT{"'.ucfirst(lc($type)).'"}%';
@@ -451,7 +451,7 @@ sub _diffType {
   unless ($getValue) {
     $getValue = sub {
       my $field = shift;
-      return join("\n", map {$_.": ".($_ eq 'date'?Foswiki::Time::formatTime($field->{$_}):$field->{$_})} grep {!/^(?:attachment|version|name|path)$/} sort keys %$field);
+      return join("\n", map {$_.": ".($_ eq 'date'?Foswiki::Time::formatTime($field->{$_}):$field->{$_}//'undef')} grep {!/^(?:attachment|version|name|path)$/} sort keys %$field);
     }
   }
 

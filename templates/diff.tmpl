@@ -87,7 +87,6 @@
             %JQICON{"fa-user"}% [[%USERSWEB%.$oldauthor]]
           </span>
         </h2>
-        %TMPL:P{context="RevCommentPluginEnabled" then="diff::revcomment" rev="$oldrev"}%<!-- -->
       </th>
       <th class='index'></th>
       <th class='new'>
@@ -101,16 +100,18 @@
             %JQICON{"fa-user"}% [[%USERSWEB%.$newauthor]]
           </span>
         </h2>
-        %TMPL:P{context="RevCommentPluginEnabled" then="diff::revcomment" rev="$newrev"}%<!-- -->
       </th>
     </tr>
+    %TMPL:P{context="RevCommentPluginEnabled" then="diff::revcomment" oldrev="$oldrev" newrev="$newrev"}%<!-- -->
   </thead>
 </table>
 %TABPANE{class="plain" animate="on" remember="on"}%%TMPL:END%
 
-%TMPL:DEF{"diff::revcomment"}%%REVCOMMENT{rev="%rev%"
-  format="<div class='foswikiDiffRevComment'><b>%MAKETEXT{"Comment"}%:</b> $text</div>"
-}%%TMPL:END%
+%TMPL:DEF{"diff::revcomment"}%<tr>
+  <th class='foswikiDiffRevComment'>%REVCOMMENT{rev="%oldrev%" format="<b>%MAKETEXT{"Comment"}%:</b> $enctext"}%</th>
+  <th></th>
+  <th class='foswikiDiffRevComment'>%REVCOMMENT{rev="%newrev%" format="<b>%MAKETEXT{"Comment"}%:</b> $enctext"}%</th>
+</tr>%TMPL:END%
 
 %TMPL:DEF{"diff::aftertext"}%%ENDTABPANE%%TMPL:END%
 

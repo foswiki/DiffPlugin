@@ -21,7 +21,15 @@
   --diff-heading-foreground: var(--color-background, #333);
 }
 
+.foswikiDiffContainer,
 .foswikiDiffContainer .jqTabPane {
+  margin:var(--margin, 1em) 0;
+}
+.foswikiDiffRevComment {
+  padding-top:var(--margin-half, 0.5em);
+}
+
+.foswikiDiffContainer tbody {
   font-size:90%;
 }
 .foswikiDiffContainer table {
@@ -58,13 +66,11 @@
 
 .foswikiDiffContainer th {
   font-weight:normal;
-  padding-top:1.5em;
-  padding-bottom:1.5em;
   vertical-align:top;
 }
 .foswikiDiffContainer th h2 {
   border:0;
-  margin:0 0 0.5em;
+  margin:0;
 }
 .foswikiDiffContainer th h2 select {
   margin:0 1em 0 0.5em; 
@@ -101,16 +107,16 @@
   padding:0.5em 0;
 }
 
-.foswikiDiffContainer b {
+.foswikiDiffContainer tbody b {
   color: var(--diff-heading-foreground);
 }
-.foswikiDiffContainer .new b {
+.foswikiDiffContainer tbody .new b {
   background:var(--diff-new-marked);
   margin: -0.5em -0.5em 0.5em -0.5em;
   display: block;
   padding: 0.5em;
 }
-.foswikiDiffContainer .old b {
+.foswikiDiffContainer tbody .old b {
   background:var(--diff-old-marked);
   margin: -0.5em -0.5em 0.5em -0.5em;
   display: block;
@@ -118,8 +124,8 @@
 }
 
 
-.foswikiDiffContainer .removed .new,
-.foswikiDiffContainer .append .old {
+.foswikiDiffContainer tbody .removed .new,
+.foswikiDiffContainer tbody .append .old {
   border:0;
   background:transparent;
 }
@@ -149,7 +155,7 @@
 }
 
 /* changed */
-.foswikiDiffContainer .changed .old { 
+.foswikiDiffContainer tbody .changed .old { 
   background-color:var(--diff-old-background); 
   color:var(--diff-old-foreground); 
 }
